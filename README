@@ -1,0 +1,30 @@
+Abstract
+--------
+This is a port of various original Plan 9 tools for Unix, based on
+plan9port [1], mk-with-libs.tgz [2], and wmii [3]. See the LICENSE
+file for license details.
+
+Requirements
+------------
+In order to build 9base you need yacc or bison.
+
+Installation
+------------
+Edit config.mk to match your local setup and  execute 'make install'
+(if necessary as root). By default, 9rc is installed into its own
+hierarchy, /usr/local/9. This is done to avoid conflicts with the
+standard tools of your system.  You can then put /usr/local/9/bin at
+the end of your PATH.
+
+Credits
+-------
+Many thanks go to Lucent, the Bell Labs which developed this fine
+stuff and to Russ Cox for his plan9port.
+
+References
+----------
+[1] http://swtch.com/plan9port/
+[2] http://swtch.com/plan9port/unix/
+[3] http://wmii.de
+
+--Anselm R. Garbe
