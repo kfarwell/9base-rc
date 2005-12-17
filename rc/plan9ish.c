@@ -27,7 +27,7 @@ char *syssigname[]={
 char*
 Rcmain(void)
 {
-    static char Rcmain[] = PREFIX"/lib/rcmain";
+    static char Rcmain[] = PREFIX"/etc/rcmain";
     char *rcmain = getenv("RCMAIN");
     return rcmain ? rcmain : Rcmain;
 }
