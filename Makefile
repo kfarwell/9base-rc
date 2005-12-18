@@ -3,8 +3,8 @@
 
 include config.mk
 
-SUBDIRS  = lib9 yacc awk basename bc cat cleanname date echo grep rc \
-           sed seq sleep sort tee test touch tr uniq
+SUBDIRS  = lib9 yacc awk basename bc cat cleanname date echo grep mk \
+		   rc sed seq sleep sort tee test touch tr uniq
 
 all:
 	@echo 9base build options:
