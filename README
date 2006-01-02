@@ -4,10 +4,6 @@ This is a port of various original Plan 9 tools for Unix, based on
 plan9port [1], mk-with-libs.tgz [2], and wmii [3]. See the LICENSE
 file for license details.
 
-Requirements
-------------
-In order to build 9base you need yacc or bison.
-
 Installation
 ------------
 Edit config.mk to match your local setup and  execute 'make install'
