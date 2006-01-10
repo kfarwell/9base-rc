@@ -5,7 +5,7 @@ PREFIX      = /usr/local/9
 MANPREFIX   = ${PREFIX}/share/man
 
 # flags
-VERSION     = 1
+VERSION     = 20060110
 CFLAGS      = -Wall -Wno-missing-braces -Wno-parentheses -Wno-switch -c -I. -DPREFIX="\"${PREFIX}\""
 LDFLAGS     = -static
 
