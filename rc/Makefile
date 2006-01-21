@@ -10,6 +10,9 @@ MANFILES  = rc.1
 
 include ../config.mk
 
+# Solaris
+#LDFLAGS   += -dy -lxnet
+
 all:
 	@if [ ! -f y.tab.c ]; then \
 	make -f Makefile depend;\

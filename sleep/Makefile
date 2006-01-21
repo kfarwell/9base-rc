@@ -4,3 +4,6 @@
 TARG      = sleep
 
 include ../std.mk
+
+# Solaris
+#LDFLAGS   += -dy -lrt

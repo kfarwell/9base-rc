@@ -4,3 +4,6 @@
 TARG      = test
 
 include ../std.mk
+
+# Solaris
+#LDFLAGS   += -dy

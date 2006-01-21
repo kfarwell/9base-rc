@@ -7,3 +7,5 @@ YFILES	  = bc.y
 MANFILES  = bc.1
 
 include ../yacc.mk
+
+LDFLAGS += -dy -lxnet

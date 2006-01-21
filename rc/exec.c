@@ -3,6 +3,9 @@
 #if defined(PLAN9PORT) && defined(__sun__)
 #	define BSD_COMP	/* sigh.  for TIOCNOTTY */
 #endif
+#ifdef __sun__
+#include <sys/termios.h>
+#endif
 #include <sys/ioctl.h>
 #include "rc.h"
 #include "getflags.h"
