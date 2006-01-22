@@ -7,10 +7,9 @@ file for license details.
 Installation
 ------------
 Edit config.mk to match your local setup and  execute 'make install'
-(if necessary as root). By default, 9rc is installed into its own
+(if necessary as root). By default, 9base is installed into its own
 hierarchy, /usr/local/9. This is done to avoid conflicts with the
-standard tools of your system.  You can then put /usr/local/9/bin at
-the end of your PATH.
+
 
 Credits
 -------
