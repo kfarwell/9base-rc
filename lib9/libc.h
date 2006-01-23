@@ -375,7 +375,7 @@ extern	int	encodefmt(Fmt*);
 extern	int	dirmodefmt(Fmt*);
 extern	void	exits(char*);
 extern	double	frexp(double, int*);
-extern	ulong	getcallerpc(void*);
+/*extern	ulong	getcallerpc(void*);*/
 extern	char*	p9getenv(char*);
 extern	int	p9putenv(char*, char*);
 extern	int	getfields(char*, char**, int, int, char*);

@@ -19,6 +19,12 @@ TARG=lib9
 # following objects are not compiled for several reasons
 #	crypt.o
 #	netcrypt.o
+#	getcallerpc-$(OBJTYPE).o
+#	convD2M.o
+#	convM2D.o
+#	convM2S.o
+#	convS2M.o
+
 OFILES=\
 	fmt/dofmt.o\
 	fmt/fltfmt.o\
@@ -112,10 +118,6 @@ OFILES=\
 	cistrncmp.o\
 	cistrstr.o\
 	cleanname.o\
-	convD2M.o\
-	convM2D.o\
-	convM2S.o\
-	convS2M.o\
 	create.o\
 	ctime.o\
 	date.o\
@@ -133,7 +135,6 @@ OFILES=\
 	execl.o\
 	fcallfmt.o\
 	get9root.o\
-	getcallerpc-$(OBJTYPE).o\
 	getenv.o\
 	getfields.o\
 	getnetconn.o\
