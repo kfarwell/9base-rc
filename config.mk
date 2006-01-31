@@ -4,7 +4,7 @@
 PREFIX      = /usr/local/9
 MANPREFIX   = ${PREFIX}/share/man
 
-VERSION     = 2
+VERSION     = 20060129
 
 # Linux/BSD
 CFLAGS      = -Wall -Wno-missing-braces -Wno-parentheses -Wno-switch -c -I. -DPREFIX="\"${PREFIX}\""
