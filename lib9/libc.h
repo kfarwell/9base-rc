@@ -9,6 +9,9 @@
 extern "C" {
 #endif                                                                
 
+#include <utf.h>
+#include <fmt.h>
+
 /*
  * Begin usual libc.h 
  */
@@ -375,7 +378,7 @@ extern	int	encodefmt(Fmt*);
 extern	int	dirmodefmt(Fmt*);
 extern	void	exits(char*);
 extern	double	frexp(double, int*);
-/*extern	ulong	getcallerpc(void*);*/
+extern	ulong	getcallerpc(void*);
 extern	char*	p9getenv(char*);
 extern	int	p9putenv(char*, char*);
 extern	int	getfields(char*, char**, int, int, char*);
@@ -595,7 +598,7 @@ extern	void		freenetconninfo(NetConnInfo*);
 #define	OCEXEC	32	/* or'ed in, close on exec */
 #define	ORCLOSE	64	/* or'ed in, remove on close */
 #define	ODIRECT	128	/* or'ed in, direct access */
-#define ONONBLOCK 256	/* or'ed in, non-blocking call */
+#define	ONONBLOCK 256	/* or'ed in, non-blocking call */
 #define	OEXCL	0x1000	/* or'ed in, exclusive use (create only) */
 #define	OLOCK	0x2000	/* or'ed in, lock after opening */
 #define	OAPPEND	0x4000	/* or'ed in, append only */
@@ -620,8 +623,9 @@ extern	void		freenetconninfo(NetConnInfo*);
 #define QTEXCL		0x20		/* type bit for exclusive use files */
 #define QTMOUNT		0x10		/* type bit for mounted channel */
 #define QTAUTH		0x08		/* type bit for authentication file */
-#define QTLINK		0x04		/* symbolic link */
-#define QTFILE		0x00		/* plain file */
+#define QTTMP		0x04		/* type bit for non-backed-up file */
+#define QTSYMLINK	0x02		/* type bit for symbolic link */
+#define QTFILE		0x00		/* type bits for plain file */
 
 /* bits in Dir.mode */
 #define DMDIR		0x80000000	/* mode bit for directories */
@@ -629,10 +633,13 @@ extern	void		freenetconninfo(NetConnInfo*);
 #define DMEXCL		0x20000000	/* mode bit for exclusive use files */
 #define DMMOUNT		0x10000000	/* mode bit for mounted channel */
 #define DMAUTH		0x08000000	/* mode bit for authentication file */
-#define DMDEVICE		0x00800000	/* mode bit for device files (Unix) */
-#define DMSYMLINK	0x00400000	/* mode bit for symbolic links (Unix) */
-#define DMNAMEDPIPE	0x00200000	/* mode bit for named pipes (Unix) */
-#define DMSOCKET		0x00100000	/* mode bit for sockets (Unix) */
+#define DMTMP		0x04000000	/* mode bit for non-backed-up file */
+#define DMSYMLINK	0x02000000	/* mode bit for symbolic link (Unix, 9P2000.u) */
+#define DMDEVICE	0x00800000	/* mode bit for device file (Unix, 9P2000.u) */
+#define DMNAMEDPIPE	0x00200000	/* mode bit for named pipe (Unix, 9P2000.u) */
+#define DMSOCKET	0x00100000	/* mode bit for socket (Unix, 9P2000.u) */
+#define DMSETUID	0x00080000	/* mode bit for setuid (Unix, 9P2000.u) */
+#define DMSETGID	0x00040000	/* mode bit for setgid (Unix, 9P2000.u) */
 
 #define DMREAD		0x4		/* mode bit for read permission */
 #define DMWRITE		0x2		/* mode bit for write permission */
@@ -691,6 +698,12 @@ struct Dir {
 	char	*uid;	/* owner name */
 	char	*gid;	/* group name */
 	char	*muid;	/* last modifier name */
+	
+	/* 9P2000.u extensions */
+	uint	uidnum;		/* numeric uid */
+	uint	gidnum;		/* numeric gid */
+	uint	muidnum;	/* numeric muid */
+	char	*ext;		/* extended info */
 } Dir;
 
 /* keep /sys/src/ape/lib/ap/plan9/sys9.h in sync with this -rsc */
@@ -822,6 +835,65 @@ extern	int	post9pservice(int, char*);
 #define main	p9main
 #endif
 
+#ifdef VARARGCK
+#pragma	varargck	type	"lld"	vlong
+#pragma	varargck	type	"llx"	vlong
+#pragma	varargck	type	"lld"	uvlong
+#pragma	varargck	type	"llx"	uvlong
+#pragma	varargck	type	"ld"	long
+#pragma	varargck	type	"lx"	long
+#pragma	varargck	type	"ld"	ulong
+#pragma	varargck	type	"lx"	ulong
+#pragma	varargck	type	"d"	int
+#pragma	varargck	type	"x"	int
+#pragma	varargck	type	"c"	int
+#pragma	varargck	type	"C"	int
+#pragma	varargck	type	"d"	uint
+#pragma	varargck	type	"x"	uint
+#pragma	varargck	type	"c"	uint
+#pragma	varargck	type	"C"	uint
+#pragma	varargck	type	"f"	double
+#pragma	varargck	type	"e"	double
+#pragma	varargck	type	"g"	double
+#pragma	varargck	type	"lf"	long double
+#pragma	varargck	type	"le"	long double
+#pragma	varargck	type	"lg"	long double
+#pragma	varargck	type	"s"	char*
+#pragma	varargck	type	"q"	char*
+#pragma	varargck	type	"S"	Rune*
+#pragma	varargck	type	"Q"	Rune*
+#pragma	varargck	type	"r"	void
+#pragma	varargck	type	"%"	void
+#pragma	varargck	type	"n"	int*
+#pragma	varargck	type	"p"	void*
+#pragma	varargck	type	"<"	void*
+#pragma	varargck	type	"["	void*
+#pragma	varargck	type	"H"	void*
+#pragma	varargck	type	"lH"	void*
+
+#pragma	varargck	flag	' '
+#pragma	varargck	flag	'#'
+#pragma	varargck	flag	'+'
+#pragma	varargck	flag	','
+#pragma	varargck	flag	'-'
+#pragma	varargck	flag	'u'
+
+#pragma	varargck	argpos	fmtprint	2
+#pragma	varargck	argpos	fprint	2
+#pragma	varargck	argpos	print	1
+#pragma	varargck	argpos	runeseprint	3
+#pragma	varargck	argpos	runesmprint	1
+#pragma	varargck	argpos	runesnprint	3
+#pragma	varargck	argpos	runesprint	2
+#pragma	varargck	argpos	seprint	3
+#pragma	varargck	argpos	smprint	1
+#pragma	varargck	argpos	snprint	3
+#pragma	varargck	argpos	sprint	2
+#pragma	varargck	argpos	sysfatal	1
+#pragma	varargck	argpos	p9syslog	3
+#pragma	varargck	argpos	werrstr	1
+#endif
+
 /* compiler directives on plan 9 */
 #define	SET(x)	((x)=0)
 #define	USED(x)	if(x){}else{}
@@ -830,16 +902,6 @@ extern	int	post9pservice(int, char*);
 #		undef USED
 #		define USED(x) { ulong __y __attribute__ ((unused)); __y = (ulong)(x); }
 #	endif
-#endif
-
-#if defined(__OpenBSD__) || (defined(__NetBSD__) && !defined(sched_yield))
-#define sched_yield() \
-	do { \
-		struct timespec ts; \
-		ts.tv_sec = 0; \
-		ts.tv_nsec = 10; \
-		nanosleep(&ts, NULL); \
-	} while(0)
 #endif
 
 /* command line */
