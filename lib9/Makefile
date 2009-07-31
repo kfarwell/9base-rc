@@ -15,16 +15,203 @@ include ../config.mk
 
 LIB=lib9.a
 TARG=lib9
+O=o
 
 # following objects are not compiled for several reasons
-#	crypt.o
-#	netcrypt.o
-#	convD2M.o
-#	convM2D.o
-#	convM2S.o
-#	convS2M.o
+#	crypt.$(O)
+#	netcrypt.$(O)
+#	convD2M.$(O)
+#	convM2D.$(O)
+#	convM2S.$(O)
+#	convS2M.$(O)
+
+NUM=\
+	fmt/charstod.$(O)\
+	fmt/pow10.$(O)\
+
+FMTOFILES=\
+	fmt/dofmt.$(O)\
+	fmt/fltfmt.$(O)\
+	fmt/fmt.$(O)\
+	fmt/fmtfd.$(O)\
+	fmt/fmtfdflush.$(O)\
+	fmt/fmtlocale.$(O)\
+	fmtlock2.$(O)\
+	fmt/fmtnull.$(O)\
+	fmt/fmtprint.$(O)\
+	fmt/fmtquote.$(O)\
+	fmt/fmtrune.$(O)\
+	fmt/fmtstr.$(O)\
+	fmt/fmtvprint.$(O)\
+	fmt/fprint.$(O)\
+	fmt/nan64.$(O)\
+	fmt/print.$(O)\
+	fmt/runefmtstr.$(O)\
+	fmt/runeseprint.$(O)\
+	fmt/runesmprint.$(O)\
+	fmt/runesnprint.$(O)\
+	fmt/runesprint.$(O)\
+	fmt/runevseprint.$(O)\
+	fmt/runevsmprint.$(O)\
+	fmt/runevsnprint.$(O)\
+	fmt/seprint.$(O)\
+	fmt/smprint.$(O)\
+	fmt/snprint.$(O)\
+	fmt/sprint.$(O)\
+	fmt/strtod.$(O)\
+	fmt/vfprint.$(O)\
+	fmt/vseprint.$(O)\
+	fmt/vsmprint.$(O)\
+	fmt/vsnprint.$(O)\
+	$(NUM)\
+
+UTFOFILES=\
+	utf/rune.$(O)\
+	utf/runestrcat.$(O)\
+	utf/runestrchr.$(O)\
+	utf/runestrcmp.$(O)\
+	utf/runestrcpy.$(O)\
+	utf/runestrdup.$(O)\
+	utf/runestrlen.$(O)\
+	utf/runestrecpy.$(O)\
+	utf/runestrncat.$(O)\
+	utf/runestrncmp.$(O)\
+	utf/runestrncpy.$(O)\
+	utf/runestrrchr.$(O)\
+	utf/runestrstr.$(O)\
+	utf/runetype.$(O)\
+	utf/utfecpy.$(O)\
+	utf/utflen.$(O)\
+	utf/utfnlen.$(O)\
+	utf/utfrrune.$(O)\
+	utf/utfrune.$(O)\
+	utf/utfutf.$(O)\
+
+BIOFILES=\
+	bio/bbuffered.$(O)\
+	bio/bfildes.$(O)\
+	bio/bflush.$(O)\
+	bio/bgetc.$(O)\
+	bio/bgetrune.$(O)\
+	bio/bgetd.$(O)\
+	bio/binit.$(O)\
+	bio/boffset.$(O)\
+	bio/bprint.$(O)\
+	bio/bputc.$(O)\
+	bio/bputrune.$(O)\
+	bio/brdline.$(O)\
+	bio/brdstr.$(O)\
+	bio/bread.$(O)\
+	bio/bseek.$(O)\
+	bio/bvprint.$(O)\
+	bio/bwrite.$(O)\
+
+REGEXFILES=\
+	regex/regcomp.$(O)\
+	regex/regerror.$(O)\
+	regex/regexec.$(O)\
+	regex/regsub.$(O)\
+	regex/regaux.$(O)\
+	regex/rregexec.$(O)\
+	regex/rregsub.$(O)\
+
+LIB9OFILES=\
+	_exits.$(O)\
+	_p9dialparse.$(O)\
+	_p9dir.$(O)\
+	announce.$(O)\
+	argv0.$(O)\
+	atexit.$(O)\
+	atoi.$(O)\
+	atol.$(O)\
+	atoll.$(O)\
+	atnotify.$(O)\
+	await.$(O)\
+	cistrcmp.$(O)\
+	cistrncmp.$(O)\
+	cistrstr.$(O)\
+	cleanname.$(O)\
+	create.$(O)\
+	ctime.$(O)\
+	dial.$(O)\
+	dirfstat.$(O)\
+	dirfwstat.$(O)\
+	dirmodefmt.$(O)\
+	dirread.$(O)\
+	dirstat.$(O)\
+	dirwstat.$(O)\
+	dup.$(O)\
+	encodefmt.$(O)\
+	errstr.$(O)\
+	exec.$(O)\
+	execl.$(O)\
+	exitcode.$(O)\
+	fcallfmt.$(O)\
+	get9root.$(O)\
+	getcallerpc-$(OBJTYPE).$(O)\
+	getenv.$(O)\
+	getfields.$(O)\
+	getnetconn.$(O)\
+	getns.$(O)\
+	getuser.$(O)\
+	getwd.$(O)\
+	jmp.$(O)\
+	lrand.$(O)\
+	lnrand.$(O)\
+	main.$(O)\
+	malloc.$(O)\
+	malloctag.$(O)\
+	mallocz.$(O)\
+	nan.$(O)\
+	needsrcquote.$(O)\
+	needstack.$(O)\
+	netmkaddr.$(O)\
+	notify.$(O)\
+	nrand.$(O)\
+	nulldir.$(O)\
+	open.$(O)\
+	opentemp.$(O)\
+	pin.$(O)\
+	pipe.$(O)\
+	post9p.$(O)\
+	postnote.$(O)\
+	qlock.$(O)\
+	quote.$(O)\
+	rand.$(O)\
+	read9pmsg.$(O)\
+	readcons.$(O)\
+	readn.$(O)\
+	rfork.$(O)\
+	searchpath.$(O)\
+	seek.$(O)\
+	sendfd.$(O)\
+	sleep.$(O)\
+	strdup.$(O)\
+	strecpy.$(O)\
+	sysfatal.$(O)\
+	syslog.$(O)\
+	sysname.$(O)\
+	time.$(O)\
+	tm2sec.$(O)\
+	tokenize.$(O)\
+	truerand.$(O)\
+	u16.$(O)\
+	u32.$(O)\
+	u64.$(O)\
+	unsharp.$(O)\
+	wait.$(O)\
+	waitpid.$(O)\
+	write.$(O)\
+	zoneinfo.$(O)\
 
 OFILES=\
+	$(FMTOFILES)\
+	$(UTFOFILES)\
+	$(BIOFILES)\
+	$(REGEXFILES)\
+	$(LIB9OFILES)
+
+OFILESOLD=\
 	fmt/dofmt.o\
 	fmt/fltfmt.o\
 	fmt/fmt.o\

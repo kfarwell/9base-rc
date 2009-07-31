@@ -7,9 +7,10 @@ extern "C" {
 #define __BSD_VISIBLE 1 /* FreeBSD 5.x */
 #if defined(__sun__)
 #	define __EXTENSIONS__ 1 /* SunOS */
-#	if defined(__SunOS5_6__) || defined(__SunOS5_7__) || defined(__SunOS5_8__)
+#	if defined(__SunOS5_6__) || defined(__SunOS5_7__) || defined(__SunOS5_8__) || defined(__SunOS5_9__) || defined(__SunOS5_10__)
 		/* NOT USING #define __MAKECONTEXT_V2_SOURCE 1 / * SunOS */
 #	else
+		/* What's left? */
 #		define __MAKECONTEXT_V2_SOURCE 1
 #	endif
 #endif
@@ -19,6 +20,17 @@ extern "C" {
 #if !defined(__APPLE__) && !defined(__OpenBSD__)
 #	define _XOPEN_SOURCE 1000
 #	define _XOPEN_SOURCE_EXTENDED 1
+#endif
+#if defined(__FreeBSD__)
+#	include <sys/cdefs.h>
+	/* for strtoll */
+#	undef __ISO_C_VISIBLE
+#	define __ISO_C_VISIBLE 1999
+#	undef __LONG_LONG_SUPPORTED
+#	define __LONG_LONG_SUPPORTED
+#endif
+#if defined(__AIX__)
+#	define _XOPEN_SOURCE 1
 #endif
 #define _LARGEFILE64_SOURCE 1
 #define _FILE_OFFSET_BITS 64
@@ -33,8 +45,6 @@ extern "C" {
 #include <assert.h>
 #include <setjmp.h>
 #include <stddef.h>
-#include <utf.h>
-#include <fmt.h>
 #include <math.h>
 #include <ctype.h>	/* for tolower */
 
@@ -138,6 +148,7 @@ typedef int8_t s8int;
 typedef uint16_t u16int;
 typedef int16_t s16int;
 typedef uintptr_t uintptr;
+typedef intptr_t intptr;
 typedef uint32_t u32int;
 typedef int32_t s32int;
 
@@ -150,17 +161,23 @@ typedef int32_t s32int;
  * Funny-named symbols to tip off 9l to autolink.
  */
 #define AUTOLIB(x)	static int __p9l_autolib_ ## x = 1;
+#define AUTOFRAMEWORK(x) static int __p9l_autoframework_ ## x = 1;
 
 /*
  * Gcc is too smart for its own good.
  */
 #if defined(__GNUC__)
+#	undef strcmp	/* causes way too many warnings */
 #	if __GNUC__ >= 4 || (__GNUC__==3 && !defined(__APPLE_CC__))
 #		undef AUTOLIB
 #		define AUTOLIB(x) int __p9l_autolib_ ## x __attribute__ ((weak));
+#		undef AUTOFRAMEWORK
+#		define AUTOFRAMEWORK(x) int __p9l_autoframework_ ## x __attribute__ ((weak));
 #	else
 #		undef AUTOLIB
 #		define AUTOLIB(x) static int __p9l_autolib_ ## x __attribute__ ((unused));
+#		undef AUTOFRAMEWORK
+#		define AUTOFRAMEWORK(x) static int __p9l_autoframework_ ## x __attribute__ ((unused));
 #	endif
 #endif
 

@@ -1,6 +1,5 @@
 #include "lib9.h"
 #include <bio.h>
-#include <fmt.h>
 
 struct	bgetd
 {

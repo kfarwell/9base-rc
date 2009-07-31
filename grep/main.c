@@ -21,6 +21,10 @@ main(int argc, char *argv[])
 		flags[ARGC()]++;
 		break;
 
+	case 'q':	/* gnu grep -q means plan 9 grep -s */
+		flags['s']++;
+		break;
+
 	case 'E':	/* ignore, turns gnu grep into egrep */
 		break;
 
@@ -170,11 +174,11 @@ loop:
 		increment(s, c);
 		goto loop;
 	}
-//	if(flags['2'])
-//		if(s->match)
-//			print("%d: %.2x**\n", s, c);
-//		else
-//			print("%d: %.2x\n", s, c);
+/*	if(flags['2']) */
+/*		if(s->match) */
+/*			print("%d: %.2x**\n", s, c); */
+/*		else */
+/*			print("%d: %.2x\n", s, c); */
 	lp++;
 	s = ns;
 	if(c == '\n') {

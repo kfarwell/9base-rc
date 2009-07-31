@@ -1,6 +1,5 @@
 #include	"lib9.h"
 #include	<bio.h>
-#include	<unistd.h>
 
 void*
 Brdline(Biobuf *bp, int delim)

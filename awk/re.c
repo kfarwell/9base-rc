@@ -25,15 +25,13 @@ THIS SOFTWARE.
 
 #define DEBUG
 #include <stdio.h>
+#include <u.h>
+#include <libc.h>
 #include <ctype.h>
-#include <setjmp.h>
-#include <math.h>
-#include <string.h>
-#include <stdlib.h>
-#include <time.h>
+#include <bio.h>
+#include <regexp.h>
 #include "awk.h"
 #include "y.tab.h"
-#include "regexp.h"
 
 	/* This file provides the interface between the main body of
 	 * awk and the pattern matching package.  It preprocesses
@@ -187,7 +185,7 @@ void
 
 	/* T/F match indication - matched string not exported */
 int
-match(void *p, char *s, char *q)
+match(void *p, char *s, char *start)
 {
 	return regexec((Reprog *) p, (char *) s, 0, 0);
 }
@@ -222,10 +220,11 @@ nematch(void *p, char *s, char *start)
 }
 /* in the parsing of regular expressions, metacharacters like . have */
 /* to be seen literally;  \056 is not a metacharacter. */
-int 
+
+int
 hexstr(char **pp)	/* find and eval hex string at pp, return new p */
 {
-	int c;
+	char c;
 	int n = 0;
 	int i;
 
@@ -323,3 +322,4 @@ overflow(void)
 {
 	FATAL("%s", "regular expression too big");
 }
+

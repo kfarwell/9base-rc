@@ -48,7 +48,7 @@ gqid(uchar *p, uchar *ep, Qid *q)
  * to test at end of routine.
  */
 uint
-convM2S(uchar *ap, uint nap, Fcall *f)
+convM2Su(uchar *ap, uint nap, Fcall *f, int dotu)
 {
 	uchar *p, *ep;
 	uint i, size;
@@ -161,6 +161,8 @@ convM2S(uchar *ap, uint nap, Fcall *f)
 		p += BIT32SZ;
 		f->mode = GBIT8(p);
 		p += BIT8SZ;
+		if(dotu)
+			p = gstring(p, ep, &f->extension);
 		break;
 
 	case Tread:
@@ -229,6 +231,13 @@ convM2S(uchar *ap, uint nap, Fcall *f)
 
 	case Rerror:
 		p = gstring(p, ep, &f->ename);
+		f->errornum = 0;
+		if(dotu){
+			if(p+BIT16SZ > ep)
+				return 0;
+			f->errornum = GBIT16(p);
+			p += BIT16SZ;
+		}
 		break;
 
 	case Rflush:
@@ -320,4 +329,10 @@ convM2S(uchar *ap, uint nap, Fcall *f)
 	if(ap+size == p)
 		return size;
 	return 0;
+}
+
+uint
+convM2S(uchar *ap, uint nap, Fcall *f)
+{
+	return convM2Su(ap, nap, f, 0);
 }

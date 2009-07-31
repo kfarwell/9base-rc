@@ -349,7 +349,7 @@ extern	vlong	p9nsec(void);
 enum
 {
 	PNPROC		= 1,
-	PNGROUP		= 2,
+	PNGROUP		= 2
 };
 
 /* extern	int	abs(int); <stdlib.h> */
@@ -376,6 +376,7 @@ extern	int	dec16(uchar*, int, char*, int);
 extern	int	enc16(char*, int, uchar*, int);
 extern	int	encodefmt(Fmt*);
 extern	int	dirmodefmt(Fmt*);
+extern	int	exitcode(char*);
 extern	void	exits(char*);
 extern	double	frexp(double, int*);
 extern	ulong	getcallerpc(void*);
@@ -390,7 +391,7 @@ extern	int	iounit(int);
 /* extern	double	ldexp(double, int); <math.h> */
 extern	void	p9longjmp(p9jmp_buf, int);
 extern	char*	mktemp(char*);
-extern	int		opentemp(char*);
+extern	int		opentemp(char*, int);
 /* extern	double	modf(double, double*); <math.h> */
 extern	void	p9notejmp(void*, p9jmp_buf, int);
 extern	void	perror(const char*);
@@ -415,6 +416,9 @@ extern	long	p9time(long*);
 /* extern	int	toupper(int); <ctype.h> */
 extern	void	needstack(int);
 extern	char*	readcons(char*, char*, int);
+
+extern	void	(*_pin)(void);
+extern	void	(*_unpin)(void);
 
 #ifndef NOPLAN9DEFINES
 #define atexit		p9atexit
@@ -670,7 +674,7 @@ enum
 	RFNOWAIT	= (1<<6),
 	RFCNAMEG	= (1<<10), 
 	RFCENVG		= (1<<11), 
-	RFCFDG		= (1<<12),
+	RFCFDG		= (1<<12)
 /*	RFREND		= (1<<13), */
 /*	RFNOMNT		= (1<<14) */
 };
@@ -789,6 +793,7 @@ extern	int	p9waitpid(void);
 extern	long	write(int, void*, long);
 extern	long	writev(int, IOchunk*, int);
 */
+extern	long	p9write(int, void*, long);
 /* extern	int	wstat(char*, uchar*, int); give up */
 extern	ulong	rendezvous(ulong, ulong);
 
@@ -809,6 +814,7 @@ extern	ulong	rendezvous(ulong, ulong);
 #define open		p9open
 #define pipe		p9pipe
 #define	waitfor		p9waitfor
+#define write		p9write
 #endif
 
 extern	Dir*	dirstat(char*);
@@ -828,7 +834,8 @@ extern	char*	get9root(void);
 extern	char*	unsharp(char*);
 extern	int	sendfd(int, int);
 extern	int	recvfd(int);
-extern	int	post9pservice(int, char*);
+extern	int	post9pservice(int, char*, char*);
+extern	int	chattyfuse;
 
 /* external names that we don't want to step on */
 #ifndef NOPLAN9DEFINES
@@ -900,7 +907,7 @@ extern	int	post9pservice(int, char*);
 #ifdef __GNUC__
 #	if __GNUC__ >= 3
 #		undef USED
-#		define USED(x) { ulong __y __attribute__ ((unused)); __y = (ulong)(x); }
+#		define USED(x) ((void)(x))
 #	endif
 #endif
 

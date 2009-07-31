@@ -1,7 +1,5 @@
 #include <lib9.h>
 
-extern	long	p9lrand(void);
-#define	lrand	p9lrand
 #define	MASK	0x7fffffffL
 
 int

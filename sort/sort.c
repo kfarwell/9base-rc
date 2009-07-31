@@ -34,7 +34,7 @@ enum
 	NSzerofract,
 	NSexp,
 	NSexpsign,
-	NSexpdigit,
+	NSexpdigit
 };
 
 typedef	struct	Line	Line;
@@ -243,8 +243,7 @@ notifyf(void *a, char *s)
 		done(0);
 	if(strncmp(s, "sys: write on closed pipe", 25) == 0)
 		done(0);
-	fprint(2, "sort: note: %s\n", s);
-	abort();
+	noted(NDFLT);
 }
 
 Line*
@@ -1583,7 +1582,7 @@ Rune*	month[12] =
 
 enum
 {
-	Threshold	= 14,
+	Threshold	= 14
 };
 
 void	rsort4(Key***, ulong, int);

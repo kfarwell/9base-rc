@@ -1,10 +1,5 @@
 #include <lib9.h>
-#include <stdarg.h>
-#include "fmt.h"
 
-extern char	*argv0;
-extern void __fixargv0(void);
-extern	void	exits(char*);
 void (*_sysfatal)(char*, ...);
 
 void

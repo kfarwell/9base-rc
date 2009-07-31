@@ -1,7 +1,5 @@
 #include	"lib9.h"
 #include	<bio.h>
-#include	<stdlib.h>
-#include	<unistd.h>
 
 static char*
 badd(char *p, int *np, char *data, int ndata, int delim, int nulldelim)

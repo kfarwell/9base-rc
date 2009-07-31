@@ -98,7 +98,7 @@ enum
 	EMPTY		= 1,
 	WHOKNOWS	= 0,
 	OK		= 1,
-	NOMORE		= -1000,
+	NOMORE		= -1000
 };
 
 	/* macros for getting associativity and precedence levels */
@@ -1223,7 +1223,7 @@ setup(int argc, char *argv[])
 	openup(stemc, dflag, vflag, ytab, ytabc);
 	fout = dflag?fdefine:ftable;
 	if(yyarg){
-		Bprint(fdefine, "#define\tYYARG\t1\n\n");
+		Bprint(ftable, "#define\tYYARG\t1\n\n");
 	}
 	if((fd = mkstemp(ttempname)) >= 0){
 		tempname = ttempname;

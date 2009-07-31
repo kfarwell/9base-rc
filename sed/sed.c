@@ -16,7 +16,7 @@ enum {
 	LBSIZE		= 8192,		/* input line size */
 	LABSIZE		= 50,		/* max label name size */
 	MAXSUB		= 10,		/* max number of sub reg exp */
-	MAXFILES	= 120,		/* max output files */
+	MAXFILES	= 120		/* max output files */
 };
 	/* An address is a line #, a R.E., "$", a reference to the last
 	 * R.E., or nothing.
@@ -27,7 +27,7 @@ typedef struct	{
 		A_DOL,
 		A_LINE,
 		A_RE,
-		A_LAST,
+		A_LAST
 	}type;
 	union {
 		long line;		/* Line # */
@@ -137,6 +137,7 @@ Rune	*hspend = holdsp;		/* End of hold data */
 
 int	nflag;				/* Command line flags */
 int	gflag;
+int	lflag;
 
 int	dolflag;			/* Set when at true EOF */
 int	sflag;				/* Set when substitution done */
@@ -233,6 +234,9 @@ main(int argc, char **argv)
 			continue;
 		case 'g':
 			gflag++;
+			continue;
+		case 'l':
+			lflag++;
 			continue;
 		default:
 			fprint(2, "sed: Unknown flag: %c\n", ARGC());
@@ -990,7 +994,7 @@ match(Reprog *pattern, Rune *buf)
 		return 0;
 	subexp[0].s.rsp = buf; 
 	subexp[0].e.rep = 0;
-	if (rregexec(pattern, linebuf, subexp, MAXSUB)) {
+	if (rregexec(pattern, linebuf, subexp, MAXSUB) > 0) {
 		loc1 = subexp[0].s.rsp;
 		loc2 = subexp[0].e.rep;
 		return 1;
@@ -1315,6 +1319,8 @@ putline(Biobuf *bp, Rune *buf, int n)
 	while (n--)
 		Bputrune(bp, *buf++);
 	Bputc(bp, '\n');
+	if(lflag)
+		Bflush(bp);
 }
 
 int

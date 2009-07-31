@@ -4,7 +4,7 @@
 #include <sys/time.h>
 #include <sys/stat.h>
 
-#if defined(__FreeBSD__) || defined(__APPLE__) || defined(__OpenBSD__)
+#if defined(__FreeBSD__) || defined(__APPLE__) || defined(__OpenBSD__) || defined(__linux__)
 /* do nothing -- futimes exists and is fine */
 
 #elif defined(__SunOS5_9__)
@@ -46,6 +46,10 @@ dirfwstat(int fd, Dir *dir)
 		tv[1].tv_sec = dir->mtime;
 		tv[1].tv_usec = 0;
 		if(futimes(fd, tv) < 0)
+			ret = -1;
+	}
+	if(~dir->length != 0){
+		if(ftruncate(fd, dir->length) < 0)
 			ret = -1;
 	}
 	return ret;

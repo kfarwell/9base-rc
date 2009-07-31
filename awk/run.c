@@ -133,6 +133,7 @@ void run(Node *a)	/* execution of parse tree starts here */
 
 Cell *execute(Node *u)	/* execute a node of the parse tree */
 {
+	int nobj;
 	Cell *(*proc)(Node **, int);
 	Cell *x;
 	Node *a;
@@ -149,10 +150,11 @@ Cell *execute(Node *u)	/* execute a node of the parse tree */
 				recbld();
 			return(x);
 		}
-		if (notlegal(a->nobj))	/* probably a Cell* but too risky to print */
+		nobj = a->nobj;
+		if (notlegal(nobj))	/* probably a Cell* but too risky to print */
 			FATAL("illegal statement");
-		proc = proctab[a->nobj-FIRSTTOKEN];
-		x = (*proc)(a->narg, a->nobj);
+		proc = proctab[nobj-FIRSTTOKEN];
+		x = (*proc)(a->narg, nobj);
 		if (isfld(x) && !donefld)
 			fldbld();
 		else if (isrec(x) && !donerec)
@@ -901,8 +903,10 @@ int format(char **pbuf, int *pbufsize, char *s, Node *a)	/* printf-like conversi
 			if (isnum(x)) {
 				if (getfval(x))
 					sprintf(p, fmt, (int) getfval(x));
-				else
+				else{
 					*p++ = '\0';
+					*p = '\0';
+				}
 			} else
 				sprintf(p, fmt, getsval(x)[0]);
 			break;
@@ -1540,6 +1544,7 @@ Cell *bltin(Node **a, int n)	/* builtin functions. a[0] is type, a[1] is arg lis
 
 Cell *printstat(Node **a, int n)	/* print a[0] */
 {
+	int r;
 	Node *x;
 	Cell *y;
 	FILE *fp;
@@ -1553,14 +1558,15 @@ Cell *printstat(Node **a, int n)	/* print a[0] */
 		fputs(getsval(y), fp);
 		tempfree(y);
 		if (x->nnext == NULL)
-			fputs(*ORS, fp);
+			r = fputs(*ORS, fp);
 		else
-			fputs(*OFS, fp);
+			r = fputs(*OFS, fp);
+		if (r == EOF)
+			FATAL("write error on %s", filename(fp));
 	}
 	if (a[1] != 0)
-		fflush(fp);
-	if (ferror(fp))
-		FATAL("write error on %s", filename(fp));
+		if (fflush(fp) == EOF)
+			FATAL("write error on %s", filename(fp));
 	return(True);
 }
 
@@ -1890,3 +1896,4 @@ void backsub(char **pb_ptr, char **sptr_ptr)	/* handle \\& variations */
 	*pb_ptr = pb;
 	*sptr_ptr = sptr;
 }
+

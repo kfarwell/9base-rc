@@ -2,6 +2,17 @@
 #include <libc.h>
 #include <ctype.h>
 
+static int
+isme(char *uid)
+{
+	int n;
+	char *p;
+
+	n = strtol(uid, &p, 10);
+	if(*p == 0 && p > uid)
+		return n == getuid();
+	return strcmp(getuser(), uid) == 0;
+}
 /*
  * Absent other hints, it works reasonably well to use
  * the X11 display name as the name space identifier.
@@ -18,8 +29,15 @@ nsfromdisplay(void)
 	char *disp, *p;
 
 	if((disp = getenv("DISPLAY")) == nil){
+#ifdef __APPLE__
+		// Might be running native GUI on OS X.
+		disp = strdup(":0.0");
+		if(disp == nil)
+			return nil;
+#else
 		werrstr("$DISPLAY not set");
 		return nil;
+#endif
 	}
 
 	/* canonicalize: xxx:0.0 => xxx:0 */
@@ -31,6 +49,11 @@ nsfromdisplay(void)
 		if(strcmp(p, ".0") == 0)
 			*p = 0;
 	}
+	
+	/* turn /tmp/launch/:0 into _tmp_launch_:0 (OS X 10.5) */
+	for(p=disp; *p; p++)
+		if(*p == '/')
+			*p = '_';
 
 	p = smprint("/tmp/ns.%s.%s", getuser(), disp);
 	free(disp);
@@ -48,7 +71,7 @@ nsfromdisplay(void)
 		free(p);
 		return nil;
 	}
-	if((d->mode&0777) != 0700 || strcmp(d->uid, getuser()) != 0){
+	if((d->mode&0777) != 0700 || !isme(d->uid)){
 		werrstr("bad name space dir %s", p);
 		free(p);
 		free(d);

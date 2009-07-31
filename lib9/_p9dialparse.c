@@ -26,6 +26,8 @@ static struct {
 	"tcp",	"venti",	17034,
 	"tcp",	"wiki",	17035,
 	"tcp",	"secstore",	5356,
+	"udp",	"dns",	53,
+	"tcp",	"dns",	53,
 };
 
 static int
@@ -81,9 +83,6 @@ p9dialparse(char *addr, char **pnet, char **punix, u32int *phost, int *pport)
 	struct servent *se;
 	struct hostent *he;
 	struct sockaddr_un *sockun;
-
-	if(strncmp(addr, "/net/", 5) == 0)
-		addr += 5;
 
 	*punix = nil;
 	net = addr;

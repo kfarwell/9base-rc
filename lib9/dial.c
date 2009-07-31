@@ -60,10 +60,6 @@ p9dial(char *addr, char *local, char *dummy2, int *dummy3)
 	}
 	free(buf);
 
-	memset(&sa, 0, sizeof sa);
-	memmove(&sa.sin_addr, &host, 4);
-	sa.sin_family = AF_INET;
-	sa.sin_port = htons(port);
 	if((s = socket(AF_INET, proto, 0)) < 0)
 		return -1;
 		
@@ -98,9 +94,17 @@ p9dial(char *addr, char *local, char *dummy2, int *dummy3)
 		free(buf);
 	}
 
-	if(connect(s, (struct sockaddr*)&sa, sizeof sa) < 0){
-		close(s);
-		return -1;
+	n = 1;
+	setsockopt(s, SOL_SOCKET, SO_BROADCAST, &n, sizeof n);
+	if(host != 0){
+		memset(&sa, 0, sizeof sa);
+		memmove(&sa.sin_addr, &host, 4);
+		sa.sin_family = AF_INET;
+		sa.sin_port = htons(port);
+		if(connect(s, (struct sockaddr*)&sa, sizeof sa) < 0){
+			close(s);
+			return -1;
+		}
 	}
 	if(proto == SOCK_STREAM){
 		int one = 1;
@@ -114,6 +118,9 @@ Unix:
 		free(buf);
 		return -1;
 	}
+	/* Allow regular files in addition to Unix sockets. */
+	if((s = open(unix, ORDWR)) >= 0)
+		return s;
 	memset(&su, 0, sizeof su);
 	su.sun_family = AF_UNIX;
 	if(strlen(unix)+1 > sizeof su.sun_path){

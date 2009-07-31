@@ -1,5 +1,4 @@
 #include <lib9.h>
-#include <unistd.h>
 
 long
 readn(int f, void *av, long n)

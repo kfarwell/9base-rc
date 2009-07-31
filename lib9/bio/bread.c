@@ -1,6 +1,5 @@
 #include	"lib9.h"
 #include	<bio.h>
-#include	<unistd.h>
 
 long
 Bread(Biobuf *bp, void *ap, long count)

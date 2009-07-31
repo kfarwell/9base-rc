@@ -1,13 +1,10 @@
 #include	"lib9.h"
 #include	<bio.h>
-#include	<fmt.h>
-#include	<sys/types.h>
-#include	<unistd.h>
 
-off_t
-Bseek(Biobuf *bp, off_t offset, int base)
+long long
+Bseek(Biobuf *bp, long long offset, int base)
 {
-	long long n, d;
+	vlong n, d;
 	int bufsz;
 
 	switch(bp->state) {
@@ -55,7 +52,7 @@ Bseek(Biobuf *bp, off_t offset, int base)
 
 	case Bwactive:
 		Bflush(bp);
-		n = lseek(bp->fid, offset, base);
+		n = seek(bp->fid, offset, base);
 		break;
 	}
 	bp->offset = n;

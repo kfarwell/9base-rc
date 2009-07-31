@@ -27,12 +27,11 @@ char *syssigname[]={
 char*
 Rcmain(void)
 {
-    static char Rcmain[] = PREFIX"/etc/rcmain";
-    char *rcmain = getenv("RCMAIN");
-    return rcmain ? rcmain : Rcmain;
+	return unsharp("#9/rcmain");
 }
 
 char Fdprefix[]="/dev/fd/";
+long readnb(int, char *, long);
 void execfinit(void);
 void execbind(void);
 void execmount(void);
@@ -129,7 +128,7 @@ void Vinit(void){
 		for(s=*env;*s && *s!='(' && *s!='=';s++);
 		switch(*s){
 		case '\0':
-		//	pfmt(err, "rc: odd environment %q?\n", *env);
+		/*	pfmt(err, "rc: odd environment %q?\n", *env); */
 			break;
 		case '=':
 			*s='\0';
@@ -200,7 +199,10 @@ int Waitfor(int pid, int unused0){
 	Waitmsg *w;
 	char errbuf[ERRMAX];
 
+	if(pid >= 0 && !havewaitpid(pid))
+		return 0;
 	while((w = wait()) != nil){
+		delwaitpid(w->pid);
 		if(w->pid==pid){
 			if(strncmp(w->msg, "signal: ", 8) == 0)
 				fprint(mapfd(2), "%d: %s\n", w->pid, w->msg);
@@ -208,7 +210,7 @@ int Waitfor(int pid, int unused0){
 			free(w);
 			return 0;
 		}
-		if(strncmp(w->msg, "signal: ", 8) == 0)
+		if(runq->iflag && strncmp(w->msg, "signal: ", 8) == 0)
 			fprint(2, "%d: %s\n", w->pid, w->msg);
 		for(p=runq->ret;p;p=p->ret)
 			if(p->pid==w->pid){
@@ -218,7 +220,7 @@ int Waitfor(int pid, int unused0){
 		free(w);
 	}
 
-	errstr(errbuf, sizeof errbuf);
+	rerrstr(errbuf, sizeof errbuf);
 	if(strcmp(errbuf, "interrupted")==0) return -1;
 	return 0;
 }
@@ -412,9 +414,11 @@ int Opendir(char *name)
 	close(f);
 	return -1;
 }
-int Readdir(int f, char *p)
+int Readdir(int f, char *p, int onlydirs)
 {
 	int n;
+	USED(onlydirs);	/* only advisory */
+
 	if(f<0 || f>=NFD)
 		return 0;
 	if(dir[f].i==dir[f].n){	/* read */
@@ -490,7 +494,7 @@ long Read(int fd, char *buf, long cnt)
 {
 	int i;
 
-	i = read(fd, buf, cnt);
+	i = readnb(fd, buf, cnt);
 	if(ntrap) dotrap();
 	return i;
 }
@@ -546,4 +550,55 @@ void Memcpy(char *a, char *b, long n)
 }
 void *Malloc(ulong n){
 	return malloc(n);
+}
+
+int
+exitcode(char *msg)
+{
+	int n;
+	
+	n = atoi(msg);
+	if(n == 0)
+		n = 1;
+	return n;
+}
+
+int *waitpids;
+int nwaitpids;
+
+void
+addwaitpid(int pid)
+{
+	waitpids = realloc(waitpids, (nwaitpids+1)*sizeof waitpids[0]);
+	if(waitpids == 0)
+		panic("Can't realloc %d waitpids", nwaitpids+1);
+	waitpids[nwaitpids++] = pid;
+}
+
+void
+delwaitpid(int pid)
+{
+	int r, w;
+	
+	for(r=w=0; r<nwaitpids; r++)
+		if(waitpids[r] != pid)
+			waitpids[w++] = waitpids[r];
+	nwaitpids = w;
+}
+
+void
+clearwaitpids(void)
+{
+	nwaitpids = 0;
+}
+
+int
+havewaitpid(int pid)
+{
+	int i;
+	
+	for(i=0; i<nwaitpids; i++)
+		if(waitpids[i] == pid)
+			return 1;
+	return 0;
 }

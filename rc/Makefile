@@ -4,7 +4,7 @@
 TARG      = rc
 OFILES    = code.o exec.o getflags.o glob.o here.o io.o lex.o \
             pcmd.o pfnc.o simple.o subr.o trap.o tree.o unixcrap.o \
-            var.o y.tab.o plan9ish.o
+            var.o y.tab.o plan9ish.o havefork.o
 YFILES    = syn.y
 MANFILES  = rc.1
 
@@ -23,6 +23,7 @@ all:
 depend:
 	@echo YACC ${YFILES}
 	@${YACC} -d ${YFILES}
+	@cp y.tab.h x.tab.h
 
 install: ${TARG}
 	@mkdir -p ${DESTDIR}${PREFIX}/bin

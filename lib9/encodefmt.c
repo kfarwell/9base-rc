@@ -1,11 +1,4 @@
 #include <lib9.h>
-#include <ctype.h>
-#include <stdlib.h>
-#include "fmt.h"
-
-extern	int	enc64(char*, int, uchar*, int);
-extern	int	enc32(char*, int, uchar*, int);
-extern	int	enc16(char*, int, uchar*, int);
 
 int
 encodefmt(Fmt *f)
@@ -16,7 +9,7 @@ encodefmt(Fmt *f)
 	int ilen;
 	int rv;
 	uchar *b;
-	char obuf[64];	// rsc optimization
+	char obuf[64];	/* rsc optimization */
 
 	b = va_arg(f->args, uchar*);
 	if(b == 0)
@@ -51,7 +44,7 @@ encodefmt(Fmt *f)
 	} else
 		buf = obuf;
 
-	// convert
+	/* convert */
 	out = buf;
 	switch(f->r){
 	case '<':
