@@ -28,11 +28,11 @@ uninstall:
 
 .c.o:
 	@echo CC $*.c
-	@${CC} ${CFLAGS} -I../lib9 -I${PREFIX}/include -I../lib9 $*.c
+	@${CC} ${CFLAGS} -I../lib9 -I../lib9 $*.c
 
 clean:
 	rm -f ${OFILES} ${TARG} y.tab.c y.tab.h
 
 ${TARG}: ${OFILES}
 	@echo LD ${TARG}
-	@${CC} ${LDFLAGS} -o ${TARG} ${OFILES} -lm -L${PREFIX}/lib -L../lib9 -l9
+	@${CC} ${LDFLAGS} -o ${TARG} ${OFILES} -lm -L../lib9 -l9
