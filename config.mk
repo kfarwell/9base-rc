@@ -1,7 +1,7 @@
 # Customize to fit your system
 
 # paths
-PREFIX      = /usr/local/9
+PREFIX      = /usr/local/plan9
 MANPREFIX   = ${PREFIX}/share/man
 
 VERSION     = 200907

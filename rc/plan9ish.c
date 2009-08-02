@@ -27,7 +27,7 @@ char *syssigname[]={
 char*
 Rcmain(void)
 {
-	return unsharp("#9/rcmain");
+	return unsharp("#9/etc/rcmain");
 }
 
 char Fdprefix[]="/dev/fd/";
