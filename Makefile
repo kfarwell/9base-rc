@@ -3,7 +3,7 @@
 
 include config.mk
 
-SUBDIRS  = lib9 yacc awk basename bc dc cat cleanname date echo grep ls \
+SUBDIRS  = lib9 yacc awk basename bc dc du cat cleanname date echo grep ls \
 		rc read sed seq sleep sort tee test touch tr uniq
 
 all:
