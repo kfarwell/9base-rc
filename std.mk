@@ -1,7 +1,7 @@
 # std.mk - included by most Makefiles in subdirs
 
-OFILES    = ${TARG}.o
-MANFILES  = ${TARG}.1
+OFILES    ?= ${TARG}.o
+MANFILES  ?= ${TARG}.1
 
 include ../config.mk
 
