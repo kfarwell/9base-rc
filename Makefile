@@ -1,10 +1,10 @@
-# 9base - awk basename cat cleanname echo grep rc sed seq sleep sort tee
-#         test touch tr uniq from Plan 9
+# 9base - awk basename cal cat cleanname echo grep rc sed seq sleep
+#         hoc sort tee test touch tr uniq from Plan 9
 
 include config.mk
 
-SUBDIRS  = lib9 yacc awk basename bc dc cat cleanname date echo grep ls \
-		rc read sed seq sleep sort tee test touch tr uniq
+SUBDIRS  = lib9 yacc awk basename bc dc cal cat cleanname date echo grep ls \
+		hoc rc read sed seq sleep sort tee test touch tr uniq
 
 all:
 	@echo 9base build options:
