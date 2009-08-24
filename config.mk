@@ -4,7 +4,7 @@
 PREFIX      = /usr/local/plan9
 MANPREFIX   = ${PREFIX}/share/man
 
-VERSION     = 3
+VERSION     = 4
 OBJTYPE     = 386
 #OBJTYPE     = arm
 #OBJTYPE     = x86_64
