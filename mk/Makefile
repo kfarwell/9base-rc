@@ -9,3 +9,9 @@ OFILES    = arc.o archive.o bufblock.o env.o file.o graph.o job.o lex.o \
 MANFILES  = mk.1
 
 include ../std.mk
+
+post-install:
+
+pre-uninstall:
+
+post-install:

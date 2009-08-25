@@ -22,7 +22,7 @@ plan9translate(char *old)
 	if(replace[0].new == nil){
 		replace[0].new = getenv("PLAN9");
 		if(replace[0].new == nil)
-			replace[0].new = "/usr/local/plan9";
+			replace[0].new = PREFIX;
 	}
 
 	for(i=0; i<nelem(replace); i++){

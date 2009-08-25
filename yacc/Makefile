@@ -4,3 +4,7 @@
 TARG      = yacc
 
 include ../std.mk
+
+pre-uninstall:
+
+post-install:

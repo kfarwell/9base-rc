@@ -4,3 +4,7 @@
 TARG      = basename
 
 include ../std.mk
+
+pre-uninstall:
+
+post-install:

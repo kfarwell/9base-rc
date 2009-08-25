@@ -4,3 +4,7 @@
 TARG      = sort
 
 include ../std.mk
+
+pre-uninstall:
+
+post-install:

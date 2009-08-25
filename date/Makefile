@@ -4,3 +4,7 @@
 TARG      = date
 
 include ../std.mk
+
+pre-uninstall:
+
+post-install:

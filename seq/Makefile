@@ -4,3 +4,7 @@
 TARG      = seq
 
 include ../std.mk
+
+pre-uninstall:
+
+post-install:

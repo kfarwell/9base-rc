@@ -4,3 +4,7 @@
 TARG      = uniq
 
 include ../std.mk
+
+pre-uninstall:
+
+post-install:

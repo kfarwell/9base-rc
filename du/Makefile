@@ -4,3 +4,7 @@
 TARG      = du
 
 include ../std.mk
+
+pre-uninstall:
+
+post-install:

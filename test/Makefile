@@ -7,3 +7,7 @@ include ../std.mk
 
 # Solaris
 #LDFLAGS   += -dy
+
+pre-uninstall:
+
+post-install:

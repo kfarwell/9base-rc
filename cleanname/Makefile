@@ -4,3 +4,7 @@
 TARG      = cleanname
 
 include ../std.mk
+
+pre-uninstall:
+
+post-install:

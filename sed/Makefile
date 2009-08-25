@@ -4,3 +4,7 @@
 TARG      = sed
 
 include ../std.mk
+
+pre-uninstall:
+
+post-install:

@@ -5,3 +5,7 @@
 TARG      = ls
 
 include ../std.mk
+
+pre-uninstall:
+
+post-install:

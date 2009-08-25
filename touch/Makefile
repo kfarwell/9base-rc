@@ -4,3 +4,7 @@
 TARG      = touch
 
 include ../std.mk
+
+pre-uninstall:
+
+post-install:
