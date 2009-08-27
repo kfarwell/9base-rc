@@ -1,7 +1,7 @@
 # std.mk - included by most Makefiles in subdirs
 
 OFILES    ?= ${TARG}.o
-MANFILES  ?= ${TARG}.1
+MANFILE   ?= ${TARG}.1
 
 include ../config.mk
 
@@ -16,12 +16,12 @@ install-default: ${TARG}
 	@cp -f ${TARG} ${DESTDIR}${PREFIX}/bin/
 	@chmod 755 ${DESTDIR}${PREFIX}/bin/${TARG}
 	@mkdir -p ${DESTDIR}${MANPREFIX}/man1
-	@cp -f ${MANFILES} ${DESTDIR}${MANPREFIX}/man1
-	@chmod 444 ${DESTDIR}${MANPREFIX}/man1/${MANFILES}
+	@cp -f ${MANFILE} ${DESTDIR}${MANPREFIX}/man1
+	@chmod 444 ${DESTDIR}${MANPREFIX}/man1/${MANFILE}
 
 uninstall: pre-uninstall
 	rm -f ${DESTDIR}${PREFIX}/bin/${TARG}
-	rm -f ${DESTDIR}${PREFIX}/man1/${MANFILES}
+	rm -f ${DESTDIR}${PREFIX}/man1/${MANFILE}
 
 .c.o:
 	@echo CC $*.c

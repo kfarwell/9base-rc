@@ -203,12 +203,8 @@ all: ${LIB}
 	@echo built lib9
 
 install:
-	@mkdir -p ${DESTDIR}${MANPREFIX}/man7
-	@cp -f regexp.7 ${DESTDIR}${MANPREFIX}/man7
-	@chmod 444 ${DESTDIR}${MANPREFIX}/man7/regexp.7
 
 uninstall:
-	rm -f ${DESTDIR}${MANPREFIX}/man7/regexp.7
 
 ${LIB}: ${OFILES}
 	@echo AR ${TARG}
