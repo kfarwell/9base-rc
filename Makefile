@@ -15,6 +15,7 @@ all:
 
 clean:
 	@for i in ${SUBDIRS}; do cd $$i; ${MAKE} clean || exit; cd ..; done
+	@rm -f 9base-${VERSION}.tar.gz
 	@echo cleaned 9base
 
 install: all
