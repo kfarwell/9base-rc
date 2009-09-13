@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include "mbwc.h"
 
 /*
  * Use the FSS-UTF transformation proposed by posix.
