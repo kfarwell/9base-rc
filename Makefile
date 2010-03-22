@@ -2,7 +2,7 @@
 
 include config.mk
 
-SUBDIRS  = lib9 yacc awk basename bc cal cat cleanname date dc du echo grep hoc ls \
+SUBDIRS  = lib9 yacc awk basename bc cal cat cleanname date dc du echo getflags grep hoc ls \
            mk mkdir mtime rc read sed seq sleep sort tee test touch tr troff uniq
 
 all:
