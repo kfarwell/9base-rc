@@ -2,8 +2,9 @@
 
 include config.mk
 
-SUBDIRS  = lib9 yacc awk basename bc cal cat cleanname date dc du echo getflags grep hoc ls \
-           mk mkdir mtime rc read sed seq sleep sort tee test touch tr troff uniq
+SUBDIRS  = lib9 yacc awk basename bc cal cat cleanname date dc du echo \
+           factor fortunes freq getflags grep hoc ls mk mkdir mtime \
+           primes rc read sed seq sleep sort tee test touch tr troff uniq
 
 all:
 	@echo 9base build options:
