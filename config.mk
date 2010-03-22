@@ -4,10 +4,10 @@
 PREFIX      = /usr/local/plan9
 MANPREFIX   = ${PREFIX}/share/man
 
-VERSION     = 4
-#OBJTYPE     = 386
+VERSION     = 5
+OBJTYPE     = 386
 #OBJTYPE     = arm
-OBJTYPE     = x86_64
+#OBJTYPE     = x86_64
 
 # Linux/BSD
 #CFLAGS      += -Wall -Wno-missing-braces -Wno-parentheses -Wno-switch -c -I. -DPREFIX="\"${PREFIX}\""
