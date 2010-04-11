@@ -4,7 +4,7 @@ include config.mk
 
 SUBDIRS  = lib9 yacc awk basename bc cal cat cleanname date dc du echo \
            fortune freq getflags grep hoc ls mk mkdir mtime rc read \
-           sed seq sleep sort tac tee test touch tr troff uniq
+           sed seq sleep sort tail tee test touch tr troff uniq
 
 # factor primes
 
