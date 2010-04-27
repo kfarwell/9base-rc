@@ -1,7 +1,8 @@
-# tac - reverse line order cat
+# tail - tail unix port from plan9
+#
 # Depends on ../lib9
 
-TARG      = tac
+TARG      = tail
 
 include ../std.mk
 
