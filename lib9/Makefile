@@ -13,9 +13,15 @@ TARG=lib9
 #	convM2S.o
 #	convS2M.o
 
+SECFILES=\
+	sec/sha1block.o\
+	sec/sha1.o\
+	sec/sha1pickle.o\
+
 NUM=\
 	fmt/charstod.o\
 	fmt/pow10.o\
+
 
 FMTOFILES=\
 	fmt/dofmt.o\
@@ -193,6 +199,7 @@ LIB9OFILES=\
 	zoneinfo.o\
 
 OFILES=\
+	$(SECFILES)\
 	$(FMTOFILES)\
 	$(UTFOFILES)\
 	$(BIOFILES)\
@@ -212,7 +219,7 @@ ${LIB}: ${OFILES}
 
 .c.o:
 	@echo CC $*.c
-	@${CC} -o $*.o ${CFLAGS} -I${PREFIX}/include $*.c
+	@${CC} -o $*.o ${CFLAGS} -Isec -I${PREFIX}/include $*.c
 
 clean:
 	rm -f ${OFILES} ${LIB}

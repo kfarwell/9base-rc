@@ -25,11 +25,11 @@ uninstall: pre-uninstall
 
 .c.o:
 	@echo CC $*.c
-	@${CC} ${CFLAGS} -I../lib9 -I../lib9 $*.c
+	@${CC} ${CFLAGS} -I../lib9 -I../lib9/sec $*.c
 
 clean:
 	rm -f ${OFILES} ${TARG}
 
 ${TARG}: ${OFILES}
 	@echo LD ${TARG}
-	@${CC} ${LDFLAGS} -o ${TARG} ${OFILES} -L../lib9 -l9
+	@${CC} ${LDFLAGS} -o ${TARG} ${OFILES} -L../lib9 -l9 -lm
