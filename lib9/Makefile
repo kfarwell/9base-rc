@@ -17,6 +17,9 @@ SECFILES=\
 	sec/sha1block.o\
 	sec/sha1.o\
 	sec/sha1pickle.o\
+	sec/md5block.o\
+	sec/md5.o\
+	sec/md5pickle.o\
 
 NUM=\
 	fmt/charstod.o\
