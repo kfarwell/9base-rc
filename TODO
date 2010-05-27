@@ -1,0 +1,11 @@
+12:13 < uriel> garbeam: add dd and diff too
+12:13 < uriel> and split
+12:14 < uriel> (and join)
+12:15 < uriel> and unutf (which I just noticed, seems to be undocumented, but seems quite useful too)
+12:15 < uriel> and tcs
+12:16 < uriel> and strings
+12:18 < uriel> oh, oh, I'm finding some great bits:
+12:18 < uriel> look(1), ascii(1) and unicode(1)
+12:19 < uriel> ok, and cmp(1) is missing too
+12:23 < uriel> hah! plan9/src/cmd/index/ is really interesting (but not worth including)
+12:26 < uriel> oh! pbd! what a wonderful discovery, we certainly should add it too
