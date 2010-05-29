@@ -121,6 +121,7 @@ void	setnoaddr(void);
 void	setwide(void);
 void	squeeze(int);
 void	substitute(int);
+char*	_mktemp(char *as);
 
 Rune La[] = { 'a', 0 };
 Rune Lr[] = { 'r', 0 };
@@ -161,7 +162,7 @@ main(int argc, char *argv[])
 		globp = Lr;
 	}
 	zero = malloc((nlall+5)*sizeof(int*));
-	tfname = mktemp(tmp);
+	tfname = _mktemp(tmp);
 	init();
 	setjmp(savej);
 	commands();
@@ -1583,7 +1584,7 @@ putchr(int ac)
 }
 
 char*
-mktemp(char *as)
+_mktemp(char *as)
 {
 	char *s;
 	unsigned pid;
