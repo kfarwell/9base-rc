@@ -21,7 +21,7 @@ install-default: ${TARG}
 
 uninstall: pre-uninstall
 	rm -f ${DESTDIR}${PREFIX}/bin/${TARG}
-	rm -f ${DESTDIR}${PREFIX}/man1/${MANFILE}
+	rm -f ${DESTDIR}${MANPREFIX}/man1/${MANFILE}
 
 .c.o:
 	@echo CC $*.c

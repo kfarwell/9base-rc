@@ -24,7 +24,7 @@ install: ${TARG}
 
 uninstall:
 	rm -f ${DESTDIR}${PREFIX}/bin/${TARG}
-	rm -f ${DESTDIR}${PREFIX}/man1/${MANFILES}
+	rm -f ${DESTDIR}${MANPREFIX}/man1/${MANFILES}
 
 .c.o:
 	@echo CC $*.c

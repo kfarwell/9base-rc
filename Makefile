@@ -36,6 +36,7 @@ SUBDIRS  = lib9\
 	primes\
 	rc\
 	read\
+	sam\
 	sha1sum\
 	sed\
 	seq\
