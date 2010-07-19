@@ -221,8 +221,8 @@ ${LIB}: ${OFILES}
 	@${AR} ${LIB} ${OFILES}
 
 .c.o:
-	@echo CC $*.c
-	@${CC} -o $*.o ${CFLAGS} -Isec -I${PREFIX}/include $*.c
+	@echo CC $<
+	@${CC} -o $@ ${CFLAGS} -Isec -I${PREFIX}/include $<
 
 clean:
 	rm -f ${OFILES} ${LIB}

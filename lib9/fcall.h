@@ -34,20 +34,25 @@ struct	Fcall
 	ushort	nwname;		/* Twalk */
 	char	*wname[MAXWELEM];	/* Twalk */
 	ushort	nwqid;		/* Rwalk */
-	Qid	wqid[MAXWELEM];		/* Rwalk */
+	Qid	wqid[MAXWELEM];	/* Rwalk */
 	vlong	offset;		/* Tread, Twrite */
 	u32int	count;		/* Tread, Twrite, Rread */
 	char	*data;		/* Twrite, Rread */
 	ushort	nstat;		/* Twstat, Rstat */
 	uchar	*stat;		/* Twstat, Rstat */
 	int	unixfd;		/* Ropenfd */
+	
+	/* 9P2000.u extensions */
+	int	errornum;	/* Rerror */
+	int	uidnum;		/* Tattach, Tauth */
+	char	*extension;	/* Tcreate */
 } Fcall;
 
 
 #define	GBIT8(p)	((p)[0])
 #define	GBIT16(p)	((p)[0]|((p)[1]<<8))
-#define	GBIT32(p)	((p)[0]|((p)[1]<<8)|((p)[2]<<16)|((p)[3]<<24))
-#define	GBIT64(p)	((vlong)((p)[0]|((p)[1]<<8)|((p)[2]<<16)|((p)[3]<<24)) |\
+#define	GBIT32(p)	((u32int)((p)[0]|((p)[1]<<8)|((p)[2]<<16)|((p)[3]<<24)))
+#define	GBIT64(p)	((u32int)((p)[0]|((p)[1]<<8)|((p)[2]<<16)|((p)[3]<<24)) |\
 				((vlong)((p)[4]|((p)[5]<<8)|((p)[6]<<16)|((p)[7]<<24)) << 32))
 
 #define	PBIT8(p,v)	(p)[0]=(v)
@@ -65,9 +70,11 @@ struct	Fcall
 /* STATFIXLEN includes leading 16-bit count */
 /* The count, however, excludes itself; total size is BIT16SZ+count */
 #define STATFIXLEN	(BIT16SZ+QIDSZ+5*BIT16SZ+4*BIT32SZ+1*BIT64SZ)	/* amount of fixed length data in a stat buffer */
+#define STATFIXLENU	(STATFIXLEN+BIT16SZ+3*BIT32SZ)	/* for 9P2000.u */
 
 #define	NOTAG		(ushort)~0U	/* Dummy tag */
 #define	NOFID		(u32int)~0U	/* Dummy fid */
+#define	NOUID		(-1)	/* Dummy uid */
 #define	IOHDRSZ		24	/* ample room for Twrite/Rread header (iounit) */
 
 enum
@@ -103,7 +110,7 @@ enum
 	Tmax,
 
 	Topenfd = 	98,
-	Ropenfd,
+	Ropenfd
 };
 
 uint	convM2S(uchar*, uint, Fcall*);
@@ -114,6 +121,15 @@ int	statcheck(uchar *abuf, uint nbuf);
 uint	convM2D(uchar*, uint, Dir*, char*);
 uint	convD2M(Dir*, uchar*, uint);
 uint	sizeD2M(Dir*);
+
+uint	convM2Su(uchar*, uint, Fcall*, int);
+uint	convS2Mu(Fcall*, uchar*, uint, int);
+uint	sizeS2Mu(Fcall*, int);
+
+int	statchecku(uchar *abuf, uint nbuf, int);
+uint	convM2Du(uchar*, uint, Dir*, char*, int);
+uint	convD2Mu(Dir*, uchar*, uint, int);
+uint	sizeD2Mu(Dir*, int);
 
 int	fcallfmt(Fmt*);
 int	dirfmt(Fmt*);

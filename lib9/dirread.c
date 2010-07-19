@@ -6,7 +6,7 @@
 
 extern int _p9dir(struct stat*, struct stat*, char*, Dir*, char**, char*);
 
-#if defined(__linux__) || defined(__FreeBSD_kernel__)
+#if defined(__linux__)
 static int
 mygetdents(int fd, struct dirent *buf, int n)
 {
