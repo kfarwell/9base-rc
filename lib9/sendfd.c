@@ -46,7 +46,7 @@ sendfd(int s, int fd)
 	cmsg->cmsg_len = CMSG_LEN(sizeof(int));
 	cmsg->cmsg_level = SOL_SOCKET;
 	cmsg->cmsg_type = SCM_RIGHTS;
-	*(int*)CMSG_DATA(cmsg) = fd;
+	memmove(CMSG_DATA(cmsg), &fd, sizeof(int));
 
 	if((n=sendmsg(s, &msg, 0)) != iov.iov_len)
 		return -1;
@@ -83,6 +83,6 @@ recvfd(int s)
 		return -1;
 	}
 	cmsg = CMSG_FIRSTHDR(&msg);
-	fd = *(int*)CMSG_DATA(cmsg);
+	memmove(&fd, CMSG_DATA(cmsg), sizeof(int));
 	return fd;
 }
