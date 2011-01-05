@@ -1,9 +1,3 @@
-#include <u.h>
-#include <signal.h>
-#if defined(PLAN9PORT) && defined(__sun__)
-#	define BSD_COMP	/* sigh.  for TIOCNOTTY */
-#endif
-#include <sys/ioctl.h>
 #include "rc.h"
 #include "getflags.h"
 #include "exec.h"
@@ -16,7 +10,6 @@ void
 Xasync(void)
 {
 	int null = open("/dev/null", 0);
-	int tty;
 	int pid;
 	char npid[10];
 	if(null<0){
@@ -30,33 +23,7 @@ Xasync(void)
 		break;
 	case 0:
 		clearwaitpids();
-		/*
-		 * I don't know what the right thing to do here is,
-		 * so this is all experimentally determined.
-		 * If we just dup /dev/null onto 0, then running
-		 * ssh foo & will reopen /dev/tty, try to read a password,
-		 * get a signal, and repeat, in a tight loop, forever.
-		 * Arguably this is a bug in ssh (it behaves the same
-		 * way under bash as under rc) but I'm fixing it here 
-		 * anyway.  If we dissociate the process from the tty,
-		 * then it won't be able to open /dev/tty ever again.
-		 * The SIG_IGN on SIGTTOU makes writing the tty
-		 * (via fd 1 or 2, for example) succeed even though 
-		 * our pgrp is not the terminal's controlling pgrp.
-		 */
-		if((tty = open("/dev/tty", OREAD)) >= 0){
-			/*
-			 * Should make reads of tty fail, writes succeed.
-			 */
-			signal(SIGTTIN, SIG_IGN);
-			signal(SIGTTOU, SIG_IGN);
-			ioctl(tty, TIOCNOTTY);
-			close(tty);
-		}
-		if(isatty(0))
-			pushredir(ROPEN, null, 0);
-		else
-			close(null);
+		pushredir(ROPEN, null, 0);
 		start(runq->code, runq->pc+1, runq->local);
 		runq->ret = 0;
 		break;
@@ -104,21 +71,31 @@ Xpipe(void)
 	}
 }
 
+char*
+erealloc(char *p, long n)
+{
+	p = realloc(p, n);		/* botch, should be Realloc */
+	if(p==0)
+		panic("Can't realloc %d bytes\n", n);
+	return p;
+}
+
 /*
  * Who should wait for the exit from the fork?
  */
+enum { Stralloc = 100, };
+
 void
 Xbackq(void)
 {
-	char wd[8193];
-	int c;
-	char *s, *ewd=&wd[8192], *stop;
+	int c, l, pid;
+	int pfd[2];
+	char *s, *wd, *ewd, *stop;
 	struct io *f;
 	var *ifs = vlook("ifs");
 	word *v, *nextv;
-	int pfd[2];
-	int pid;
-	stop = ifs->val?ifs->val->word:"";
+
+	stop = ifs->val? ifs->val->word: "";
 	if(pipe(pfd)<0){
 		Xerror("can't make pipe");
 		return;
@@ -139,10 +116,16 @@ Xbackq(void)
 		addwaitpid(pid);
 		close(pfd[PWR]);
 		f = openfd(pfd[PRD]);
-		s = wd;
+		s = wd = ewd = 0;
 		v = 0;
 		while((c = rchr(f))!=EOF){
-			if(strchr(stop, c) || s==ewd){
+			if(s==ewd){
+				l = s-wd;
+				wd = erealloc(wd, l+Stralloc);
+				ewd = wd+l+Stralloc-1;
+				s = wd+l;
+			}
+			if(strchr(stop, c)){
 				if(s!=wd){
 					*s='\0';
 					v = newword(wd, v);
@@ -155,6 +138,8 @@ Xbackq(void)
 			*s='\0';
 			v = newword(wd, v);
 		}
+		if(wd)
+			efree(wd);
 		closeio(f);
 		Waitfor(pid, 0);
 		/* v points to reversed arglist -- reverse it onto argv */
