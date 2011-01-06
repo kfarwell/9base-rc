@@ -29,6 +29,7 @@ SUBDIRS  = lib9\
 	join\
 	look\
 	ls\
+	md5sum\
 	mk\
 	mkdir\
 	mtime\
@@ -53,6 +54,7 @@ SUBDIRS  = lib9\
 	unicode\
 	uniq\
 	unutf\
+	wc
 
 all:
 	@echo 9base build options:
