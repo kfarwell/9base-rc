@@ -8,6 +8,7 @@ VERSION     = 7
 OBJTYPE     = 386
 #OBJTYPE     = arm
 #OBJTYPE     = x86_64
+#OBJTYPE     = sun4u
 
 # Linux/BSD
 #CFLAGS      += -Wall -Wno-missing-braces -Wno-parentheses -Wno-switch -c -I. -DPREFIX="\"${PREFIX}\""
