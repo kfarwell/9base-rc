@@ -27,6 +27,7 @@ SUBDIRS  = lib9\
 	grep\
 	hoc\
 	join\
+	listen1\
 	look\
 	ls\
 	md5sum\
