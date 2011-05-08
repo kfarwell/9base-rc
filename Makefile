@@ -38,6 +38,7 @@ SUBDIRS  = lib9\
 	primes\
 	rc\
 	read\
+	rm\
 	sam\
 	sha1sum\
 	sed\
@@ -45,6 +46,7 @@ SUBDIRS  = lib9\
 	sleep\
 	sort\
 	split\
+	ssam\
 	strings\
 	tail\
 	tee\

@@ -6,7 +6,7 @@ MANFILE   ?= ${TARG}.1
 include ../config.mk
 
 all: ${TARG}
-	@strip ${TARG}
+#	@strip ${TARG}
 	@echo built ${TARG}
 
 install: install-default post-install
