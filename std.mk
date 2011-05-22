@@ -10,7 +10,7 @@ all: ${TARG}
 	@echo built ${TARG}
 
 install: install-default post-install
-       
+
 install-default: ${TARG}
 	@mkdir -p ${DESTDIR}${PREFIX}/bin
 	@cp -f ${TARG} ${DESTDIR}${PREFIX}/bin/
