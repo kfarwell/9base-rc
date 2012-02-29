@@ -7,6 +7,15 @@
 #if defined(__FreeBSD__) || defined(__APPLE__) || defined(__OpenBSD__) || defined(__linux__)
 /* do nothing -- futimes exists and is fine */
 
+# if defined(__UCLIBC__)
+/* use futimesat */
+static int
+futimes(int fd, struct timeval *tv)
+{
+        return futimesat(fd, 0, tv);
+}
+
+# endif
 #elif defined(__SunOS5_9__)
 /* use futimesat */
 static int

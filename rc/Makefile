@@ -50,4 +50,4 @@ clean:
 
 ${TARG}: ${OFILES}
 	@echo LD ${TARG}
-	@${CC} ${LDFLAGS} -o ${TARG} ${OFILES} -lm -L${PREFIX}/lib -L../lib9 -l9
+	@${CC} ${LDFLAGS} -o ${TARG} ${OFILES} -L${PREFIX}/lib -L../lib9 -l9 -lm
