@@ -3,10 +3,28 @@
 #include <libc.h>
 #include <sys/stat.h>
 #include <dirent.h>
+#if defined(__linux__) && (__UCLIBC__)
+# include <sys/syscall.h>
+#endif
 
 extern int _p9dir(struct stat*, struct stat*, char*, Dir*, char**, char*);
 
 #if defined(__linux__)
+# if defined(__UCLIBC__)
+/* uClibc doesn't provide getdirentries(2), getdents(2) isn't wrapped
+ * by uClibc either.  So we are using getdents(2) syscall directly.
+ */
+# warning "uClibc based system are using getdents(2) syscall directly."
+static int
+mygetdents(int fd, struct dirent *buf, int n)
+{
+#  if defined(__USE_LARGEFILE64)
+	 return syscall(SYS_getdents64, fd, (void*)buf, n);
+#  else
+	 return syscall(SYS_getdents, fd, (void*)buf, n);
+#  endif
+}
+# else
 static int
 mygetdents(int fd, struct dirent *buf, int n)
 {
@@ -18,6 +36,7 @@ mygetdents(int fd, struct dirent *buf, int n)
 	nn = getdirentries(fd, (void*)buf, n, &off);
 	return nn;
 }
+# endif
 #elif defined(__APPLE__) || defined(__FreeBSD__)
 static int
 mygetdents(int fd, struct dirent *buf, int n)

@@ -1,7 +1,7 @@
 /*	join F1 F2 on stuff */
 #include <u.h>
-#include <libc.h>
 #include <stdio.h>
+#include <libc.h>
 #include <ctype.h>
 #define F1 0
 #define F2 1

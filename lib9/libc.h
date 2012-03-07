@@ -334,6 +334,13 @@ extern	long	p9tm2sec(Tm*);
 extern	vlong	p9nsec(void);
 
 #ifndef NOPLAN9DEFINES
+/* Clear some declarations to avoid conflicts in edge situation.
+ * uClibc based systems have this issue.
+ */
+#undef gmtime
+#undef localtime
+#undef asctime
+#undef ctime
 #define	gmtime		p9gmtime
 #define	localtime	p9localtime
 #define	asctime		p9asctime
