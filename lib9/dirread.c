@@ -3,26 +3,23 @@
 #include <libc.h>
 #include <sys/stat.h>
 #include <dirent.h>
-#if defined(__linux__) && (__UCLIBC__)
+
+#if defined (__UCLIBC__)
 # include <sys/syscall.h>
+# if defined (__USE_LARGEFILE64)
+#  define getdents SYS_getdents64
+# else
+#  define getdents SYS_getdents
+# endif
 #endif
 
 extern int _p9dir(struct stat*, struct stat*, char*, Dir*, char**, char*);
 
 #if defined(__linux__)
-# if defined(__UCLIBC__)
-/* uClibc doesn't provide getdirentries(2), getdents(2) isn't wrapped
- * by uClibc either.  So we are using getdents(2) syscall directly.
- */
-# warning "uClibc based system are using getdents(2) syscall directly."
+# if defined (__UCLIBC__)
 static int
-mygetdents(int fd, struct dirent *buf, int n)
-{
-#  if defined(__USE_LARGEFILE64)
-	 return syscall(SYS_getdents64, fd, (void*)buf, n);
-#  else
-	 return syscall(SYS_getdents, fd, (void*)buf, n);
-#  endif
+mygetdents(int fd, struct dirent *buf, int n) {
+  return syscall (getdents, fd, (void*) buf, n);
 }
 # else
 static int
