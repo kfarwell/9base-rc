@@ -58,10 +58,10 @@ typedef	struct	Tbuf	Tbuf;
 /* the BSD goo is because SunOS sprintf doesn't return anything useful */
 
 #ifdef BSD4_2
-#define	OUT		(obufp += strlen(sprintf(obufp,
+#define	OUT		(obufp += strlen((sprintf)(obufp,
 #define	PUT		))) > obuf+BUFSIZ ? flusho() : 1
 #else
-#define	OUT		(obufp += sprintf(obufp,
+#define	OUT		(obufp += (sprintf)(obufp,
 #define	PUT		)) > obuf+BUFSIZ ? flusho() : 1
 #endif
 
@@ -69,7 +69,7 @@ typedef	struct	Tbuf	Tbuf;
 #define	oput(c)		( *obufp++ = (c), obufp > obuf+BUFSIZ ? flusho() : 1 )
 
 extern	char	errbuf[];
-#define	ERROR	sprintf(errbuf,
+#define	ERROR	(sprintf)(errbuf,
 #define	WARN	), errprint()
 #define	FATAL	), errprint(), exit(1)
 
