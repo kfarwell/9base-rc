@@ -9,6 +9,9 @@ cat, read, nobs \- catenate files
 .br
 .B read
 [
+.B -c
+] [
+[
 .B -m
 ] [
 .B -n
@@ -61,6 +64,18 @@ flag causes it to continue reading and writing multiple lines until end of file;
 causes it to read no more than
 .I nline
 lines.
+.PP
+With the
+.B -c
+flag,
+.I read
+copies exactly
+.I nbytes
+of characters instead of lines. It is mutually exclusive with
+.B -n
+and
+.B -m
+flag.
 .PP
 .I Read
 always executes a single
