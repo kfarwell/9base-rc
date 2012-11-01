@@ -1,6 +1,5 @@
 Missing commands:
 
-* ssam (script in p9p/bin/ssam)
-* rm
+* file (from 9front)
 * cp (also missing from p9p too)
 * mv (also missing from p9p too)
