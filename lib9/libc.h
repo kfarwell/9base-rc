@@ -438,6 +438,7 @@ extern	void	(*_unpin)(void);
 #define decrypt		p9decrypt
 #define getenv		p9getenv
 #define	getwd		p9getwd
+#undef longjmp
 #define	longjmp		p9longjmp
 #undef  setjmp
 #define setjmp		p9setjmp

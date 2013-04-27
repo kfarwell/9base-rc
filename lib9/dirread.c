@@ -21,6 +21,12 @@ static int
 mygetdents(int fd, struct dirent *buf, int n) {
   return syscall (getdents, fd, (void*) buf, n);
 }
+# elif defined(__MUSL__)
+static int
+mygetdents(int fd, struct dirent *buf, int n)
+{
+	return getdents(fd, (void*)buf, n);
+}
 # else
 static int
 mygetdents(int fd, struct dirent *buf, int n)
