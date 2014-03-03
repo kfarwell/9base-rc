@@ -4,7 +4,7 @@
 #include <sys/stat.h>
 #include <dirent.h>
 
-#if defined (__UCLIBC__)
+#if defined (__linux__)
 # include <sys/syscall.h>
 # if defined (__USE_LARGEFILE64)
 #  define getdents SYS_getdents64
@@ -16,30 +16,10 @@
 extern int _p9dir(struct stat*, struct stat*, char*, Dir*, char**, char*);
 
 #if defined(__linux__)
-# if defined (__UCLIBC__)
 static int
 mygetdents(int fd, struct dirent *buf, int n) {
   return syscall (getdents, fd, (void*) buf, n);
 }
-# elif defined(__MUSL__)
-static int
-mygetdents(int fd, struct dirent *buf, int n)
-{
-	return getdents(fd, (void*)buf, n);
-}
-# else
-static int
-mygetdents(int fd, struct dirent *buf, int n)
-{
-	off_t off;
-	int nn;
-
-	/* This doesn't match the man page, but it works in Debian with a 2.2 kernel */
-	off = p9seek(fd, 0, 1);
-	nn = getdirentries(fd, (void*)buf, n, &off);
-	return nn;
-}
-# endif
 #elif defined(__APPLE__) || defined(__FreeBSD__)
 static int
 mygetdents(int fd, struct dirent *buf, int n)

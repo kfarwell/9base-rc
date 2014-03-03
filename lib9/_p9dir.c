@@ -61,7 +61,7 @@ disksize(int fd, struct stat *st)
 	return (vlong)lab.d_partitions[n].p_size * lab.d_secsize;
 }
 
-#elif defined(__linux__) && !defined(__MUSL__)
+#elif defined(__linux__)
 #include <linux/hdreg.h>
 #include <linux/fs.h>
 #include <sys/ioctl.h>

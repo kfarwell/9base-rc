@@ -2,9 +2,6 @@
 #define NOPLAN9DEFINES
 #include <libc.h>
 #include <termios.h>
-#ifndef __MUSL__
-# include <sys/termios.h>
-#endif
 
 static int
 rawx(int fd, int echoing)
