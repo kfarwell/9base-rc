@@ -28,12 +28,21 @@ mygetdents(int fd, struct dirent *buf, int n)
 	return getdirentries(fd, (void*)buf, n, &off);
 }
 #elif defined(__OpenBSD__)
+#include <sys/param.h>
+# if OpenBSD < 201405 /* for OpenBSD 5.4 and earlier */
 static int
 mygetdents(int fd, struct dirent *buf, int n)
 {
 	off_t off;
 	return getdirentries(fd, (void*)buf, n, &off);
 }
+# else
+static int
+mygetdents(int fd, struct dirent *buf, int n)
+{
+	return getdents(fd, (void*)buf, n);
+}
+# endif
 #elif defined(__sun__) || defined(__NetBSD__)
 static int
 mygetdents(int fd, struct dirent *buf, int n)
