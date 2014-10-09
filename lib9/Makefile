@@ -213,8 +213,11 @@ all: ${LIB}
 	@echo built lib9
 
 install:
+	@mkdir -p ${DESTDIR}${PREFIX}/lib
+	@cp -f ${LIB} ${DESTDIR}${PREFIX}/lib/
 
 uninstall:
+	rm -f ${DESTDIR}${PREFIX}/lib/${LIB}
 
 ${LIB}: ${OFILES}
 	@echo AR ${TARG}
