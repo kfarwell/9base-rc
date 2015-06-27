@@ -84,7 +84,7 @@ xshort:
 		goto badarg;
 	if(y < 1 || y > 9999)
 		goto badarg;
-	Bprint(&bout, "   %s %u\n", smon[m-1], y);
+	Bprint(&bout, "   %s %d\n", smon[m-1], y);
 	Bprint(&bout, "%s\n", dayw);
 	cal(m, y, string, 24);
 	for(i=0; i<6*24; i+=24)
@@ -99,7 +99,7 @@ xlong:
 	if(y<1 || y>9999)
 		goto badarg;
 	Bprint(&bout, "\n\n\n");
-	Bprint(&bout, "                                %u\n", y);
+	Bprint(&bout, "                                %d\n", y);
 	Bprint(&bout, "\n");
 	for(i=0; i<12; i+=3) {
 		for(j=0; j<6*72; j++)
