@@ -12,7 +12,7 @@ digestfmt(Fmt *fmt)
 
 	p = va_arg(fmt->args, uchar*);
 	for(i=0; i<SHA1dlen; i++)
-		sprint(buf+2*i, "%.2ux", p[i]);
+		sprint(buf+2*i, "%.2x", p[i]);
 	return fmtstrcpy(fmt, buf);
 }
 
