@@ -7,3 +7,7 @@ YFILES    = grep.y
 MANFILES  = grep.1
 
 include ../yacc.mk
+
+pre-uninstall:
+
+post-install:

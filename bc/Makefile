@@ -10,3 +10,10 @@ include ../yacc.mk
 
 # Solaris
 #LDFLAGS += -dy -lxnet
+
+pre-uninstall:
+	rm -f ${DESTDIR}${PREFIX}/lib/bclib
+
+post-install:
+	@mkdir -p ${DESTDIR}${PREFIX}/lib
+	@cp bclib ${DESTDIR}${PREFIX}/lib/

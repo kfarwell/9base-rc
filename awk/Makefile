@@ -7,3 +7,7 @@ YFILES	  = awkgram.y
 MANFILES  = awk.1
 
 include ../yacc.mk
+
+pre-uninstall:
+
+post-install:

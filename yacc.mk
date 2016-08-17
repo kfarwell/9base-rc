@@ -14,7 +14,9 @@ depend:
 	@echo YACC ${YFILES}
 	@${YACC} -d ${YFILES}
 
-install: ${TARG}
+install: install-default post-install
+
+install-default: ${TARG}
 	@mkdir -p ${DESTDIR}${PREFIX}/bin
 	@cp -f ${TARG} ${DESTDIR}${PREFIX}/bin/
 	@chmod 755 ${DESTDIR}${PREFIX}/bin/${TARG}
@@ -22,7 +24,7 @@ install: ${TARG}
 	@cp -f ${MANFILES} ${DESTDIR}${MANPREFIX}/man1
 	@chmod 444 ${DESTDIR}${MANPREFIX}/man1/${MANFILES}
 
-uninstall:
+uninstall: pre-uninstall
 	rm -f ${DESTDIR}${PREFIX}/bin/${TARG}
 	rm -f ${DESTDIR}${MANPREFIX}/man1/${MANFILES}
 

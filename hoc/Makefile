@@ -7,3 +7,7 @@ YFILES    = hoc.y
 MANFILES  = hoc.1
 
 include ../yacc.mk
+
+pre-uninstall:
+
+post-install:
