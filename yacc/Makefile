@@ -6,8 +6,8 @@ TARG      = yacc
 include ../std.mk
 
 pre-uninstall:
-	rm -f ${DESTDIRK}${PREFIX}/yacc/yaccpar
-	rm -f ${DESTDIRK}${PREFIX}/yacc/yaccpars
+	rm -f ${DESTDIR}${PREFIX}/yacc/yaccpar
+	rm -f ${DESTDIR}${PREFIX}/yacc/yaccpars
 
 post-install:
 	@mkdir -p ${DESTDIR}${PREFIX}/yacc
