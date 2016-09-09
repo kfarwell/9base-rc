@@ -6,7 +6,7 @@
 
 #if defined (__linux__)
 # include <sys/syscall.h>
-# if defined (__USE_LARGEFILE64)
+# if defined (_LARGEFILE64_SOURCE)
 #  define getdents SYS_getdents64
 # else
 #  define getdents SYS_getdents
