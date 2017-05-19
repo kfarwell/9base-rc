@@ -1,3 +1,5 @@
+#include <u.h>
+#include <signal.h>
 #include "rc.h"
 #include "getflags.h"
 #include "exec.h"
@@ -71,31 +73,23 @@ Xpipe(void)
 	}
 }
 
-char*
-erealloc(char *p, long n)
-{
-	p = realloc(p, n);		/* botch, should be Realloc */
-	if(p==0)
-		panic("Can't realloc %d bytes\n", n);
-	return p;
-}
-
 /*
  * Who should wait for the exit from the fork?
  */
-enum { Stralloc = 100, };
-
 void
 Xbackq(void)
 {
-	int c, l, pid;
-	int pfd[2];
-	char *s, *wd, *ewd, *stop;
+	struct thread *p = runq;
+	char wd[8193];
+	int c, n;
+	char *s, *ewd=&wd[8192], *stop, *q;
 	struct io *f;
 	var *ifs = vlook("ifs");
 	word *v, *nextv;
-
-	stop = ifs->val? ifs->val->word: "";
+	int pfd[2];
+	int pid;
+	Rune r;
+	stop = ifs->val?ifs->val->word:"";
 	if(pipe(pfd)<0){
 		Xerror("can't make pipe");
 		return;
@@ -116,30 +110,31 @@ Xbackq(void)
 		addwaitpid(pid);
 		close(pfd[PWR]);
 		f = openfd(pfd[PRD]);
-		s = wd = ewd = 0;
+		s = wd;
 		v = 0;
 		while((c = rchr(f))!=EOF){
-			if(s==ewd){
-				l = s-wd;
-				wd = erealloc(wd, l+Stralloc);
-				ewd = wd+l+Stralloc-1;
-				s = wd+l;
-			}
-			if(strchr(stop, c)){
-				if(s!=wd){
-					*s='\0';
-					v = newword(wd, v);
-					s = wd;
+			if(s != ewd) {
+				*s++ = c;
+				for(q=stop; *q; q+=n) {
+					n = chartorune(&r, q);
+					if(s-wd >= n && memcmp(s-n, q, n) == 0) {
+						s -= n;
+						goto stop;
+					}
 				}
+				continue;
 			}
-			else *s++=c;
+		stop:
+			if(s != wd) {
+				*s = '\0';
+				v = newword(wd, v);
+			}
+			s = wd;
 		}
 		if(s!=wd){
 			*s='\0';
 			v = newword(wd, v);
 		}
-		if(wd)
-			efree(wd);
 		closeio(f);
 		Waitfor(pid, 0);
 		/* v points to reversed arglist -- reverse it onto argv */
@@ -149,7 +144,7 @@ Xbackq(void)
 			runq->argv->words = v;
 			v = nextv;
 		}
-		runq->pc = runq->code[runq->pc].i;
+		p->pc = p->code[p->pc].i;
 		return;
 	}
 }
@@ -161,18 +156,33 @@ Xpipefd(void)
 	int pc = p->pc, pid;
 	char name[40];
 	int pfd[2];
-	int sidefd, mainfd;
-	if(pipe(pfd)<0){
-		Xerror("can't get pipe");
-		return;
+	struct { int sidefd, mainfd; } fd[2], *r, *w;
+
+	r = &fd[0];
+	w = &fd[1];
+	switch(p->code[pc].i){
+	case READ:
+		w = nil;
+		break;
+	case WRITE:
+		r = nil;
 	}
-	if(p->code[pc].i==READ){
-		sidefd = pfd[PWR];
-		mainfd = pfd[PRD];
+
+	if(r){
+		if(pipe(pfd)<0){
+			Xerror("can't get pipe");
+			return;
+		}
+		r->sidefd = pfd[PWR];
+		r->mainfd = pfd[PRD];
 	}
-	else{
-		sidefd = pfd[PRD];
-		mainfd = pfd[PWR];
+	if(w){
+		if(pipe(pfd)<0){
+			Xerror("can't get pipe");
+			return;
+		}
+		w->sidefd = pfd[PRD];
+		w->mainfd = pfd[PWR];
 	}
 	switch(pid = fork()){
 	case -1:
@@ -181,17 +191,32 @@ Xpipefd(void)
 	case 0:
 		clearwaitpids();
 		start(p->code, pc+2, runq->local);
-		close(mainfd);
-		pushredir(ROPEN, sidefd, p->code[pc].i==READ?1:0);
+		if(r){
+			close(r->mainfd);
+			pushredir(ROPEN, r->sidefd, 1);
+		}
+		if(w){
+			close(w->mainfd);
+			pushredir(ROPEN, w->sidefd, 0);
+		}
 		runq->ret = 0;
 		break;
 	default:
 		addwaitpid(pid);
-		close(sidefd);
-		pushredir(ROPEN, mainfd, mainfd);	/* isn't this a noop? */
-		strcpy(name, Fdprefix);
-		inttoascii(name+strlen(name), mainfd);
-		pushword(name);
+		if(w){
+			close(w->sidefd);
+			pushredir(ROPEN, w->mainfd, w->mainfd);	/* so that Xpopredir can close it later */
+			strcpy(name, Fdprefix);
+			inttoascii(name+strlen(name), w->mainfd);
+			pushword(name);
+		}
+		if(r){
+			close(r->sidefd);
+			pushredir(ROPEN, r->mainfd, r->mainfd);
+			strcpy(name, Fdprefix);
+			inttoascii(name+strlen(name), r->mainfd);
+			pushword(name);
+		}
 		p->pc = p->code[pc+1].i;
 		break;
 	}
