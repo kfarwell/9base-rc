@@ -77,6 +77,7 @@ ulong	nlall = 128;
 int	tfile	= -1;
 int	vflag	= 1;
 
+#define getline p9getline
 void	add(int);
 int*	address(void);
 int	append(int(*)(void), int*);
