@@ -3,24 +3,27 @@
 void*
 mal(int n)
 {
-	static char *s;
+	static char *s = NULL;
 	static int m = 0;
-	void *v;
+	void *v = NULL;
 
 	n = (n+3) & ~3;
 	if(m < n) {
 		if(n > Nhunk) {
-			v = sbrk(n);
-			memset(v, 0, n);
+			v = malloc(n);
+			if(v != NULL)
+				memset(v, 0, n);
 			return v;
 		}
-		s = sbrk(Nhunk);
+		s = malloc(Nhunk);
 		m = Nhunk;
 	}
 	v = s;
-	s += n;
+	if(s != NULL)
+		s += n;
 	m -= n;
-	memset(v, 0, n);
+	if(v != NULL)
+		memset(v, 0, n);
 	return v;
 }
 

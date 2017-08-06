@@ -782,7 +782,6 @@ extern	long	read(int, void*, long);
 extern	long	readn(int, void*, long);
 /* extern	long	readv(int, IOchunk*, int); <unistd.h> */
 extern	int	remove(const char*);
-/* extern	void*	sbrk(ulong); <unistd.h> */
 /* extern	long	oseek(int, long, int); */
 extern	vlong	p9seek(int, vlong, int);
 /* give up
