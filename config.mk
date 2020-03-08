@@ -21,5 +21,5 @@ LDFLAGS     += -static
 
 # compiler
 AR          = ar rc
-CC          = cc
+CC          = musl-gcc
 YACC        = ../yacc/9yacc

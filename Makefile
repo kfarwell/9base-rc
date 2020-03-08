@@ -4,61 +4,7 @@ include config.mk
 
 SUBDIRS  = lib9\
 	yacc\
-	ascii\
-	awk\
-	basename\
-	bc\
-	cal\
-	cat\
-	cleanname\
-	cmp\
-	date\
-	dc\
-	du\
-	dd\
-	diff\
-	echo\
-	ed\
-	factor\
-	fortune\
-	fmt\
-	freq\
-	getflags\
-	grep\
-	hoc\
-	join\
-	listen1\
-	look\
-	ls\
-	md5sum\
-	mk\
-	mkdir\
-	mtime\
-	pbd\
-	primes\
-	rc\
-	read\
-	rm\
-	sam\
-	sha1sum\
-	sed\
-	seq\
-	sleep\
-	sort\
-	split\
-	ssam\
-	strings\
-	tail\
-	tee\
-	test\
-	touch\
-	tr\
-	troff\
-	unicode\
-	uniq\
-	unutf\
-	urlencode\
-	wc
+	rc
 
 all:
 	@echo 9base build options:
