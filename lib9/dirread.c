@@ -16,9 +16,10 @@
 extern int _p9dir(struct stat*, struct stat*, char*, Dir*, char**, char*);
 
 #if defined(__linux__)
+#include <sys/syscall.h>
 static int
 mygetdents(int fd, struct dirent *buf, int n) {
-  return syscall (getdents, fd, (void*) buf, n);
+  return syscall (SYS_getdents, fd, (void*) buf, n);
 }
 #elif defined(__APPLE__) || defined(__FreeBSD__)
 static int

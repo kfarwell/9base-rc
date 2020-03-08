@@ -1,3 +1,4 @@
+#define _FILE_OFFSET_BITS 64
 #include <u.h>
 #define NOPLAN9DEFINES
 #include <libc.h>
@@ -61,38 +62,16 @@ disksize(int fd, struct stat *st)
 	return (vlong)lab.d_partitions[n].p_size * lab.d_secsize;
 }
 
-#elif defined(__linux__)
-#include <linux/hdreg.h>
-#include <linux/fs.h>
-#include <sys/ioctl.h>
-#undef major
-#define major(dev) ((int)(((dev) >> 8) & 0xff))
-static vlong
-disksize(int fd, struct stat *st)
-{
-	u64int u64;
-	long l;
-	struct hd_geometry geo;
-
-	memset(&geo, 0, sizeof geo);
-	l = 0;
-	u64 = 0;
-#ifdef BLKGETSIZE64
-	if(ioctl(fd, BLKGETSIZE64, &u64) >= 0)
-		return u64;
-#endif
-	if(ioctl(fd, BLKGETSIZE, &l) >= 0)
-		return l*512;
-	if(ioctl(fd, HDIO_GETGEO, &geo) >= 0)
-		return (vlong)geo.heads*geo.sectors*geo.cylinders*512;
-	return 0;
-}
-
 #else
+#include <unistd.h>
 static vlong
 disksize(int fd, struct stat *st)
 {
-	return 0;
+	off_t n;
+	n = lseek(fd, 0, SEEK_END);
+	if (n == -1)
+		return 0;
+	return n;
 }
 #endif
 

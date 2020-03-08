@@ -7,7 +7,7 @@
 #define _LIBC_H_ 1
 #if defined(__cplusplus)
 extern "C" {
-#endif                                                                
+#endif
 
 #include <utf.h>
 #include <fmt.h>
